@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Apply the font to the root element */
+@font-face {
+  font-family: 'Cabinet';
+  src: url('./fonts/cabinet.ttf');
+}
+@font-face {
+    font-family: 'poetsen';
+    src: url('./fonts/poetsen.ttf');
+  }
+
+body {
+  font-family: 'Cabinet'; 
+}
+
+::-webkit-scrollbar {
+  display: none; 
+}
+
