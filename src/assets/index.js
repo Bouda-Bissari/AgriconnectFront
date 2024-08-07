@@ -22,6 +22,7 @@ import Image22 from './Image22.jpg';
 import Image23 from './Image23.jpg';
 import person from './person.png';
 import not from './404.png';
+import logo from './logo.png';
 
 
 export {
@@ -48,6 +49,7 @@ export {
     Image22,
     Image23,
     person,
-    not
+    not,
+    logo
 
 };

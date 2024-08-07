@@ -5,15 +5,16 @@ import axiosClient from "../axiosClient.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { logo } from "../assets/index.js";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { token, user, setUser, setToken } = useStateContext();
 
-  const onLogout = (ev) => {
-    ev.preventDefault();
-
+  const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
       setToken(null);
@@ -30,10 +31,9 @@ export default function Navbar() {
 
   const location = useLocation();
 
-  // Fonction pour définir un style si le lien est actif ou non
   const isActive = (path) => {
     return location.pathname === path
-      ? "block py-2 px-3 text-white bg-orange-700 hover:bg-orange-800  focus:outline-none focus:ring-orange-300 font-medium rounded-lg md:bg-orange-500 md:text-white  md:p-2 md:dark:text-white p-4"
+      ? "block py-2 px-3 text-white bg-orange-700 hover:bg-orange-800 focus:outline-none focus:ring-orange-300 font-medium rounded-lg md:bg-orange-500 md:text-white md:p-2 md:dark:text-white p-4"
       : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-2 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 p-4";
   };
 
@@ -41,9 +41,14 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
   useEffect(() => {
-    // Fermer le menu lorsque la route change
+    // Fermer les menus lorsque la route change
     setIsOpen(false);
+    setIsUserMenuOpen(false);
   }, [location.pathname]);
 
   useGSAP(() => {
@@ -70,14 +75,14 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 ">
+    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span
             className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white logo"
             style={{ fontFamily: "poetsen" }}
           >
-            🌾 AgriConnect
+           <img src={logo} className="h-[4rem] w-[8rem]" alt="" />
           </span>
         </a>
         <div
@@ -85,14 +90,69 @@ export default function Navbar() {
           style={{ fontFamily: "poetsen" }}
         >
           {token ? (
-            <button
-              id="link"
-              type="button"
-              onClick={onLogout}
-              className="text-white bg-orange-300 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800"
-            >
-              Logout
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={toggleUserMenu}
+                className="flex text-sm bg-white rounded-full focus:ring-4 focus:ring-green-300 dark:focus:ring-green-600"
+                aria-expanded={isUserMenuOpen}
+              >
+                {/* <img
+                  className="w-8 h-8 rounded-full"
+                  src={user.avatar_url || "https://via.placeholder.com/40"}
+                  alt="User Avatar"
+                /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  />
+                </svg>
+
+                <span className="sr-only">Open user menu</span>
+              </button>
+              {isUserMenuOpen && (
+                <div
+                  className="z-50 absolute right-0 my-4 p-5 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                  id="user-dropdown"
+                >
+                  <div className="py-3">
+                    <span className="block text-sm text-gray-900 dark:text-white">
+                      {user.fullName}
+                    </span>
+                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
+                      {user.email}
+                    </span>
+                  </div>
+                  <ul className="py-2" aria-labelledby="user-menu-button">
+                    <li>
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      >
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={onLogout}
+                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-left"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="flex space-x-2">
               <Link
@@ -168,16 +228,17 @@ export default function Navbar() {
               >
                 Offres
               </Link>
-            </li>            <li>
+            </li>
+            <li>
               <Link
                 id="link"
                 to="/postulants"
-                className={isActive("/postulant")}
+                className={isActive("/postulants")}
                 aria-current={
                   location.pathname === "/postulants" ? "page" : undefined
                 }
               >
-              Candidats
+                Candidats
               </Link>
             </li>
             <li>

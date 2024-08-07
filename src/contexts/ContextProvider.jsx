@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
   user: null,
+  // detail: null,
   token: null,
   setUser: () => {},
   setToken: () => {},
@@ -10,6 +11,8 @@ const StateContext = createContext({
 // eslint-disable-next-line react/prop-types
 export const ContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  // const [detail] = useState({});
+
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
   const setToken = (token) => {
@@ -26,6 +29,7 @@ export const ContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         user,
+        // detail,
         setUser,
         token,
         setToken,

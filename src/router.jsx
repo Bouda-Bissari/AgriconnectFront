@@ -22,6 +22,7 @@ import DeleteRole from "./views/DeleteRole.jsx";
 import Services from "./components/Services.jsx";
 import Profil from "./views/Profil.jsx";
 import ProfilDetails from "./components/ProfilDetails.jsx";
+import DetailServices from "./views/DetailServices.jsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/acceuil",
         element: <Acceuil />,
+      },
+      {
+        path: "/detailservice/:jobId",
+        element: <DetailServices />,
       },
 
       {
@@ -88,7 +93,7 @@ const router = createBrowserRouter([
         path: "/choix",
         element: <ChoicePage />,
       },
-     
+
       {
         path: "/details",
         element: <DetailsForm />,
@@ -116,19 +121,16 @@ const router = createBrowserRouter([
     ],
   },
 
-
   {
     path: "/",
     element: <Profil />,
     children: [
       {
-        path: "/profil",
+        path: "/profil/:userId",
         element: <ProfilDetails />,
       },
-     
     ],
   },
-
 
   {
     path: "*",
