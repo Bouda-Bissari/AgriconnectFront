@@ -7,7 +7,7 @@ const ProfilCard = ({
   fullName,
   profilId,
   email,
-  age,
+  date,
   gender,
   avatar_url,
   bio,

@@ -12,11 +12,26 @@ const DetailProfil = () => {
   const [error, setError] = useState(null);
   const { token } = UserContext();
 
+  const calculateAge = (dateOfBirth) => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   useEffect(() => {
     axios
       .get(`profile/${profilId}`)
       .then((response) => {
-        setProfilData(response.data);
+        const profileData = response.data;
+        if (profileData.details && profileData.details.date) {
+          profileData.details.age = calculateAge(profileData.details.date);
+        }
+        setProfilData(profileData);
         setLoading(false);
       })
       .catch((error) => {
@@ -34,19 +49,14 @@ const DetailProfil = () => {
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <p className="m-40">Error: {error}</p>;
   }
 
   if (!profilData) {
     return <p>Pas de profil disponible</p>;
   }
 
-  // Assurez-vous que details est défini
-  const details = profilData.details || {};
-
-  // Extraction des données
   const { fullName, phone_number, domaine } = profilData;
-
   const {
     email = null,
     age,
@@ -55,7 +65,7 @@ const DetailProfil = () => {
     bio,
     company_name,
     address,
-  } = details;
+  } = profilData.details || {};
 
   return (
     <div className="my-40">
@@ -65,7 +75,6 @@ const DetailProfil = () => {
             <div className="flex flex-col items-center mb-4">
               <img
                 src={avatar_url || person}
-                
                 alt="User Avatar"
                 className="object-center object-cover rounded-full h-36 w-36 mb-4"
               />
@@ -178,14 +187,14 @@ const DetailProfil = () => {
               )}
             </div>
           </div>
-
-          <div className="p-5">
+          <div className="pt-6 md:pt-0 md:px-6">
             <img
               src={avatar_url || person}
               alt="User Avatar"
-              className="object-center object-cover rounded w-full mb-4"
+              className="object-center object-cover rounded w-full h-full"
             />
-          </div>
+        </div>
+
         </div>
       </section>
     </div>

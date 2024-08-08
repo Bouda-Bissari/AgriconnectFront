@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { person } from "../assets/index.js";
 import axios from "../configs/axiosClient.js";
@@ -12,9 +11,10 @@ const ProfilDetails = () => {
   // if (!token) {
   //   return <Navigate to={"/acceuil"} />;
   // }
+
   const [profile, setProfile] = useState({
     email: "",
-    age: "",
+    date: "",
     gender: "",
     avatar_url: "",
     bio: "",
@@ -37,7 +37,7 @@ const ProfilDetails = () => {
         setProfile((prevProfile) => ({
           ...prevProfile,
           email: details.email || "",
-          age: details.age || "",
+          date: details.date || "",
           gender: details.gender || "",
           avatar_url: details.avatar_url || person,
           bio: details.bio || "",
@@ -70,12 +70,25 @@ const ProfilDetails = () => {
   }, [userId]);
 
   const handleChange = (event) => {
-    const { id, value } = event.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [id]: value,
-    }));
+    const { id, value, type } = event.target;
+    if (type === "radio") {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        gender: value,
+      }));
+    } else if (type === "select-one") {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        domaine: value,
+      }));
+    } else {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        [id]: value,
+      }));
+    }
   };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setProfile((prevProfile) => ({
@@ -91,7 +104,7 @@ const ProfilDetails = () => {
     const formData = new FormData();
     formData.append("id", userId);
     formData.append("email", profile.email);
-    formData.append("age", profile.age);
+    formData.append("date", profile.date);
     formData.append("gender", profile.gender);
     formData.append("bio", profile.bio);
     formData.append("company_name", profile.company_name);
@@ -109,8 +122,10 @@ const ProfilDetails = () => {
       console.log("sendingData", key, value);
     }
 
+    console.log(profile)
+
     axios
-      .put(`/profile/${userId}`, formData)
+      .put(`/profile/${userId}`, profile)
       .then((response) => {
         setSuccessMessage("Profil mis à jour avec succès.");
         console.log("Profil mis à jour avec succès :", response.data);
@@ -139,7 +154,7 @@ const ProfilDetails = () => {
   const handleDeleteImage = () => {
     axios
       .delete(`/api/user/profile/${userId}/image`)
-      .then((response) => {
+      .then(() => {
         setProfile((prevProfile) => ({
           ...prevProfile,
           avatar_url: person,
@@ -212,11 +227,8 @@ const ProfilDetails = () => {
               className="items-center mt-8 sm:mt-14 text-[#202142]"
             >
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Votre email
+                <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
+                  Email
                 </label>
                 <input
                   type="email"
@@ -230,10 +242,7 @@ const ProfilDetails = () => {
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="fullName"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
                   Nom complet
                 </label>
                 <input
@@ -248,17 +257,14 @@ const ProfilDetails = () => {
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="phone_number"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
                   Numéro de téléphone
                 </label>
                 <input
-                  type="tel"
+                  type="text"
                   id="phone_number"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="+228 123 456 789"
+                  placeholder="228 12345678"
                   value={profile.phone_number}
                   onChange={handleChange}
                   required
@@ -266,40 +272,117 @@ const ProfilDetails = () => {
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="age"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Âge
+                <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
+                  Date de naissance
                 </label>
                 <input
-                  type="number"
-                  id="age"
+                  type="date"
+                  id="date"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Âge"
-                  value={profile.age}
+                  value={profile.date}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="gender"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
+                <label className="block mb-2 text-sm font-medium text-orange-900 ">
                   Genre
                 </label>
-                <input
-                  type="text"
-                  id="gender"
-                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Genre"
-                  value={profile.gender}
-                  onChange={handleChange}
-                />
+                <div className="flex space-x-4">
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="gender_masculin"
+                      name="gender"
+                      value="Masculin"
+                      checked={profile.gender === "Masculin"}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="gender_masculin"
+                      className="text-sm font-medium text-orange-900 "
+                    >
+                      Masculin
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="gender_feminin"
+                      name="gender"
+                      value="Féminin"
+                      checked={profile.gender === "Féminin"}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="gender_feminin"
+                      className="text-sm font-medium text-orange-900 "
+                    >
+                      Féminin
+                    </label>
+                  </div>
+                </div>
               </div>
 
               <div className="mb-2 sm:mb-6">
+                <label
+                  htmlFor="domaine"
+                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
+                >
+                  Domaine
+                </label>
+                <select
+                  id="domaine"
+                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                  value={profile.domaine}
+                  onChange={handleChange}
+                >
+                  <option value="">Sélectionnez un domaine</option>
+                  <option value="Culture de céréales">
+                    Culture de céréales
+                  </option>
+                  <option value="Culture de légumes">Culture de légumes</option>
+                  <option value="Culture de fruits">Culture de fruits</option>
+                  <option value="Culture de tubercules">
+                    Culture de tubercules
+                  </option>
+                  <option value="Élevage de bétail">Élevage de bétail</option>
+                  <option value="Élevage de volailles">
+                    Élevage de volailles
+                  </option>
+                  <option value="Aquaculture">Aquaculture</option>
+                  <option value="Jardinage">Jardinage</option>
+                  <option value="Sarclage">Sarclage</option>
+                  <option value="Arboriculture">Arboriculture</option>
+                  <option value="Horticulture">Horticulture</option>
+                  <option value="Viticulture">Viticulture</option>
+                  <option value="Culture de plantes médicinales">
+                    Culture de plantes médicinales
+                  </option>
+                  <option value="Cultures sous serre">
+                    Cultures sous serre
+                  </option>
+                  <option value="Agroforesterie">Agroforesterie</option>
+                  <option value="Culture bio">Culture bio</option>
+                  <option value="Recrutement de travailleurs agricoles">
+                    Recrutement de travailleurs agricoles
+                  </option>
+                  <option value="Gestion des fermes">Gestion des fermes</option>
+                  <option value="Consultation en agriculture">
+                    Consultation en agriculture
+                  </option>
+                  <option value="Vente de produits agricoles">
+                    Vente de produits agricoles
+                  </option>
+                  <option value="Formation agricole">Formation agricole</option>
+                  <option value="Autre">Autre</option>
+                </select>
+              </div>
+
+              <div className="mb-6">
                 <label
                   htmlFor="bio"
                   className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
@@ -310,66 +393,15 @@ const ProfilDetails = () => {
                   id="bio"
                   rows="4"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Écrivez quelque chose sur vous..."
+                  placeholder="Écrivez quelques lignes sur vous..."
                   value={profile.bio}
-                  onChange={handleChange}
-                ></textarea>
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="company_name"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Nom de l&apos;entreprise
-                </label>
-                <input
-                  type="text"
-                  id="company_name"
-                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Nom de l'entreprise"
-                  value={profile.company_name}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="address"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Adresse
-                </label>
-                <input
-                  type="text"
-                  id="address"
-                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Adresse"
-                  value={profile.address}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="domaine"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Domaine
-                </label>
-                <input
-                  type="text"
-                  id="domaine"
-                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Domaine"
-                  value={profile.domaine}
                   onChange={handleChange}
                 />
               </div>
 
               <button
                 type="submit"
-                className="py-3.5 px-7 text-base font-medium text-orange-900 focus:outline-none bg-orange-100 rounded-lg border border-orange-200 hover:bg-orange-200 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-orange-200"
+                className="py-2 px-4 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:ring-orange-300 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800"
               >
                 Mettre à jour le profil
               </button>

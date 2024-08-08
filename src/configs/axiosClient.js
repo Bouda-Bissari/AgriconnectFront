@@ -28,7 +28,7 @@ axiosClient.interceptors.response.use(
                 if (response.status === 401) {
                     localStorage.removeItem('ACCESS_TOKEN');
                     // Redirige l'utilisateur vers la page de login
-                    window.location.href = '/login';
+                    // window.location.href = '/login';
                 }
 
                 // Gère les erreurs 403 (interdit)

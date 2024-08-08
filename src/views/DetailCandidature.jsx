@@ -1,61 +1,14 @@
-import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import axios from "../configs/axiosClient.js";
-import { person } from "../assets/index.js";
-import SkeletonDetailService from "../components/SkeletonDetailService.jsx";
-import { UserContext } from "../contexts/ContextProvider.jsx";
-import imagePath from "../configs/imageUrl.js";
+/* eslint-disable react/prop-types */
+import { person } from '../assets/index.js';
+import imagePath from '../configs/imageUrl.js';
 
-const DetailServices = () => {
-  const { jobId } = useParams(); // Get the jobId from the URL
-  const [serviceData, setServiceData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { token } = UserContext();
-
-  useEffect(() => {
-    axios
-      .get(`detailservice/${jobId}`)
-      .then((response) => {
-        setServiceData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
-  }, [jobId]);
-  if (!token) {
-    return <Navigate to={"/login"} />;
-  }
-  if (loading) {
-    if (loading) {
-      return <SkeletonDetailService />;
-    }
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  if (!serviceData) {
-    return <p>Pas de serices disponibles</p>;
-  }
-
-  // Destructure the data for easier access
-  const { title, description, location, image, price } = serviceData.service;
-  const { phone_number } = serviceData.service.user || {};
-  const { email } = serviceData.profiles || {};
-
+const DetailCandidature = ({ title, description, location, image, price, phoneNumber, email }) => {
   return (
     <div className="my-40">
       <section className="container mx-auto rounded-sm py-6 dark:bg-orange-900 dark:text-white">
         <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
           <div className="py-6 md:py-0 md:px-6">
-            <h1
-              className="text-4xl text-center "
-              style={{ fontFamily: "poetsen" }}
-            >
+            <h1 className="text-4xl text-center" style={{ fontFamily: "poetsen" }}>
               {title}
             </h1>
             <p className="pt-2 pb-4 text-center">{description}</p>
@@ -84,7 +37,7 @@ const DetailServices = () => {
                 >
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
                 </svg>
-                <span className="font-bold">{phone_number}</span>
+                <span className="font-bold">{phoneNumber}</span>
               </p>
               {email && (
                 <p className="flex items-center">
@@ -100,7 +53,6 @@ const DetailServices = () => {
                   <span className="font-bold">{email}</span>
                 </p>
               )}
-
               <p className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,34 +65,19 @@ const DetailServices = () => {
                 <span className="font-bold">{price} FCFA</span>
               </p>
             </div>
-            <form
-              noValidate=""
-              className="flex flex-col py-6 space-y-6 mt-3 md:py-0 md:px-6"
+            <button
+              type="button"
+              onClick={() => {}}
+              className="self-center font-bold px-5 py-2 w-full text-lg rounded focus:ring hover:ring focus:ring-opacity-75 dark:bg-green-600 dark:text-gray-50 focus:dark:ring-green-600 hover:dark:ring-green-600"
             >
-              <label className="block">
-                <span className="mb-1">Message</span>
-                <textarea
-                  rows="3"
-                  className="block w-full rounded-md focus:ring focus:ring-opacity-75 focus:dark:ring-green-600 dark:bg-gray-100 text-black"
-                ></textarea>
-              </label>
-              <button
-                type="button"
-                onClick={() => {}}
-                className="self-center font-bold px-5 py-2 w-full text-lg rounded focus:ring hover:ring focus:ring-opacity-75 dark:bg-green-600 dark:text-gray-50 focus:dark:ring-green-600 hover:dark:ring-green-600"
-              >
-                Postuler
-              </button>
-            </form>
+              Annuler la Candidature
+            </button>
           </div>
-
           <div className="w-full h-full md:mt-2">
             <div
               className="lg:block w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage: `url('${
-                  image? `${imagePath}/${image}` : person
-                }')`,
+                backgroundImage: `url('${image ? `${imagePath}/${image}` : person}')`,
               }}
             >
               <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40"></div>
@@ -152,4 +89,4 @@ const DetailServices = () => {
   );
 };
 
-export default DetailServices;
+export default DetailCandidature ;

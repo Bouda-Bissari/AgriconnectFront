@@ -31,7 +31,7 @@ const UserProfile = () => {
     fetchProfiles();
   }, []);
   if (!token) {
-    return <Navigate to={"/acceuil"} />;
+    return <Navigate to={"/login"} />;
   } else {
     if (loading) {
       return (
@@ -67,7 +67,7 @@ const UserProfile = () => {
               fullName={profile.fullName}
               email={profile.details?.email || "Non disponible"}
               phone_number={profile.phone_number}
-              age={profile.details?.age || "Non disponible"}
+              date={profile.details?.date || "Non disponible"}
               gender={profile.details?.gender || "Non disponible"}
               avatar_url={profile.details?.avatar_url || person}
               bio={profile.details?.bio || "Non disponible"}
