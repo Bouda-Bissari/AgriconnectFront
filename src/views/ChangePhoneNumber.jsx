@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import Axios from "../axiosClient.js";
+import Axios from "../configs/axiosClient.js";
 import { useNavigate } from "react-router-dom";
-import { useStateContext } from "../contexts/ContextProvider";
+import { UserContext } from "../contexts/ContextProvider";
 
 const ChangePhoneNumber = () => {
-  const { setUser, user } = useStateContext();
+  const { setUser, user } = UserContext();
   const [newPhoneNumber, setNewPhoneNumber] = useState(() => {
     return localStorage.getItem("newPhoneNumber") || "";
   });

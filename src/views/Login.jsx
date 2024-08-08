@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axiosClient from "../axiosClient";
-import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../configs/axiosClient.js";
+import { UserContext } from "../contexts/ContextProvider";
 import { Image3 } from "../assets/index.js";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, setToken } = useStateContext();
+  const { setUser, setToken, setRole } = UserContext();
   const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
@@ -45,20 +45,21 @@ export default function Login() {
         console.log("Success:", data);
         setToken(data.token);
         setUser(data.user);
+        setRole(data.role);
 
         // Redirection en fonction du rôle
-        const role = data.role;
-        if (role === "postulant") {
-          navigate(`/profil/postulant/${data.user.id}`);
-        } else if (role === "demandeur") {
-          navigate(`/profil/demandeur/${data.user.id}`);
-        } else if (role === "admin") {
-          navigate(`/profil/admin/${data.user.id}`);
-        } else if (role === "moderateur") {
-          navigate(`/profil/moderateur/${data.user.id}`);
-        } else {
-          navigate("/");
-        }
+        // const role = data.role;
+        // if (role === "postulant") {
+        //   navigate(`/profil/${data.user.id}`);
+        // } else if (role === "demandeur") {
+        //   navigate(`/profil/${data.user.id}`);
+        // } else if (role === "admin") {
+        //   navigate(`/profil/admin/${data.user.id}`);
+        // } else if (role === "moderateur") {
+        //   navigate(`/profil/${data.user.id}`);
+        // } else {
+        navigate("/");
+        // }
       })
       .catch((err) => {
         const response = err.response;
@@ -168,7 +169,7 @@ export default function Login() {
             <p className="mt-6 text-sm text-center text-gray-400">
               Vous n&apos;avez pas encore de compte ?
               <Link
-                to="/register"
+                to="/choix"
                 className="text-blue-500 focus:outline-none focus:underline hover:underline"
               >
                 Inscrivez-vous

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useStateContext } from "../contexts/ContextProvider.jsx";
-import axiosClient from "../axiosClient.js";
+import { UserContext } from "../contexts/ContextProvider.jsx";
+import axiosClient from "../configs/axiosClient.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,7 +12,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { token, user, setUser, setToken } = useStateContext();
+  const { token, user, setUser, setToken, role } = UserContext();
+  const userId = JSON.parse(localStorage.getItem("USER_ID"));
 
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
@@ -82,7 +83,7 @@ export default function Navbar() {
             className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white logo"
             style={{ fontFamily: "poetsen" }}
           >
-           <img src={logo} className="h-[4rem] w-[8rem]" alt="" />
+            <img src={logo} className="h-[4rem] w-[8rem]" alt="" />
           </span>
         </a>
         <div
@@ -135,7 +136,7 @@ export default function Navbar() {
                   <ul className="py-2" aria-labelledby="user-menu-button">
                     <li>
                       <Link
-                        to="/profile"
+                        to={`/profil/${userId}`}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                       >
                         Profile
@@ -253,6 +254,29 @@ export default function Navbar() {
                 Users
               </Link>
             </li>
+            {/* Conditional rendering based on role */}
+            {role === "demandeur" && (
+              <li>
+                <Link
+                  id="link"
+                  to="/create-offer"
+                  className={isActive("/create-offer")}
+                >
+                  Créer une offre
+                </Link>
+              </li>
+            )}
+            {role === "postulant" && (
+              <li>
+                <Link
+                  id="link"
+                  to="/search-offers"
+                  className={isActive("/search-offers")}
+                >
+                  Rechercher des offres
+                </Link>
+              </li>
+            )}
             {token && (
               <li>
                 <Link

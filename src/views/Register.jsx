@@ -1,13 +1,13 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import axiosClient from "../axiosClient.js";
-import { useStateContext } from "../contexts/ContextProvider.jsx";
+import axiosClient from "../configs/axiosClient.js";
+import { UserContext } from "../contexts/ContextProvider.jsx";
 import { Image12 } from "../assets/index.js";
 const Register = () => {
   const { role } = useParams();
 
   const navigate = useNavigate();
-  const { setUser, setToken } = useStateContext();
+  const { setUser, setToken, setRole } = UserContext();
 
   const [form, setForm] = useState({
     phone_number: "",
@@ -61,6 +61,7 @@ const Register = () => {
         console.log("Succès:", data);
         setToken(data.token);
         setUser(data.user);
+        setRole(data.role);
         navigate("/otp");
       })
       .catch((err) => {

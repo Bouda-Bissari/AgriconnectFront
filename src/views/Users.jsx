@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import axiosClient from "../axiosClient.js";
-import { useStateContext } from "../contexts/ContextProvider.jsx";
+import axiosClient from "../configs/axiosClient.js";
+import { UserContext } from "../contexts/ContextProvider.jsx";
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { token } = useStateContext();
+  const { token } = UserContext();
   // const [open, setOpen] = useState(false);
 
   useEffect(() => {

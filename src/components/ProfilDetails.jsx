@@ -1,11 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { person } from "../assets/index.js";
-import axios from "../axiosClient.js";
-import { useParams } from "react-router-dom";
+import axios from "../configs/axiosClient.js";
+import { Navigate, useParams } from "react-router-dom";
+import { UserContext } from "../contexts/ContextProvider.jsx";
 
 const ProfilDetails = () => {
   const { userId } = useParams();
+  const { token } = UserContext();
+
+  // if (!token) {
+  //   return <Navigate to={"/acceuil"} />;
+  // }
   const [profile, setProfile] = useState({
     email: "",
     age: "",
@@ -19,6 +25,8 @@ const ProfilDetails = () => {
     phone_number: "",
     imageFile: null,
   });
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     axios
@@ -26,7 +34,6 @@ const ProfilDetails = () => {
       .then((response) => {
         const userData = response.data;
         const details = userData.details || {};
-        console.log(response.data);
         setProfile((prevProfile) => ({
           ...prevProfile,
           email: details.email || "",
@@ -42,7 +49,19 @@ const ProfilDetails = () => {
         }));
       })
       .catch((error) => {
-        console.log(profile);
+        if (error.response) {
+          if (error.response.status === 403) {
+            setError("Vous n'êtes pas autorisé à accéder à ce profil.");
+          } else if (error.response.status === 404) {
+            setError("Profil non trouvé.");
+          } else {
+            setError(
+              "Une erreur est survenue lors de la récupération du profil."
+            );
+          }
+        } else {
+          setError("Une erreur est survenue.");
+        }
         console.error(
           "Il y a eu une erreur lors de la récupération du profil :",
           error
@@ -57,7 +76,6 @@ const ProfilDetails = () => {
       [id]: value,
     }));
   };
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setProfile((prevProfile) => ({
@@ -86,28 +104,39 @@ const ProfilDetails = () => {
       formData.append("avatar_url", profile.imageFile);
     }
 
-    //Inspect FormData contents
+    // Inspect FormData contents
     for (let [key, value] of formData.entries()) {
-      console.log("sendingData");
-
-      console.log(key, value);
+      console.log("sendingData", key, value);
     }
 
     axios
       .put(`/profile/${userId}`, formData)
       .then((response) => {
+        setSuccessMessage("Profil mis à jour avec succès.");
         console.log("Profil mis à jour avec succès :", response.data);
       })
       .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 403) {
+            setError("Vous n'êtes pas autorisé à mettre à jour ce profil.");
+          } else if (error.response.status === 404) {
+            setError("Profil non trouvé.");
+          } else {
+            setError(
+              "Une erreur est survenue lors de la mise à jour du profil."
+            );
+          }
+        } else {
+          setError("Une erreur est survenue.");
+        }
         console.error(
           "Il y a eu une erreur lors de la mise à jour du profil :",
-          error.response ? error.response.data : error.message
+          error
         );
       });
   };
 
   const handleDeleteImage = () => {
-    // Remplacez l'URL par celle de votre API pour supprimer l'image du profil
     axios
       .delete(`/api/user/profile/${userId}/image`)
       .then((response) => {
@@ -116,9 +145,23 @@ const ProfilDetails = () => {
           avatar_url: person,
           imageFile: null,
         }));
+        setSuccessMessage("Image supprimée avec succès.");
         console.log("Image supprimée avec succès");
       })
       .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 403) {
+            setError("Vous n'êtes pas autorisé à supprimer cette image.");
+          } else if (error.response.status === 404) {
+            setError("Image non trouvée.");
+          } else {
+            setError(
+              "Une erreur est survenue lors de la suppression de l'image."
+            );
+          }
+        } else {
+          setError("Une erreur est survenue.");
+        }
         console.error(
           "Il y a eu une erreur lors de la suppression de l'image :",
           error
@@ -131,6 +174,11 @@ const ProfilDetails = () => {
       <div className="p-2 md:p-4">
         <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
           <h2 className="pl-6 text-2xl font-bold sm:text-xl">Profil Public</h2>
+
+          {error && <div className="text-red-500">{error}</div>}
+          {successMessage && (
+            <div className="text-green-500">{successMessage}</div>
+          )}
 
           <div className="grid max-w-2xl mx-auto mt-8">
             <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
@@ -192,7 +240,7 @@ const ProfilDetails = () => {
                   type="text"
                   id="fullName"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre nom complet"
+                  placeholder="Jean Dupont"
                   value={profile.fullName}
                   onChange={handleChange}
                   required
@@ -207,10 +255,10 @@ const ProfilDetails = () => {
                   Numéro de téléphone
                 </label>
                 <input
-                  type="text"
+                  type="tel"
                   id="phone_number"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre numéro de téléphone"
+                  placeholder="+228 123 456 789"
                   value={profile.phone_number}
                   onChange={handleChange}
                   required
@@ -228,10 +276,9 @@ const ProfilDetails = () => {
                   type="number"
                   id="age"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre âge"
+                  placeholder="Âge"
                   value={profile.age}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
@@ -246,11 +293,27 @@ const ProfilDetails = () => {
                   type="text"
                   id="gender"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Masculin ou Féminin"
+                  placeholder="Genre"
                   value={profile.gender}
                   onChange={handleChange}
-                  required
                 />
+              </div>
+
+              <div className="mb-2 sm:mb-6">
+                <label
+                  htmlFor="bio"
+                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
+                >
+                  Biographie
+                </label>
+                <textarea
+                  id="bio"
+                  rows="4"
+                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                  placeholder="Écrivez quelque chose sur vous..."
+                  value={profile.bio}
+                  onChange={handleChange}
+                ></textarea>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -258,7 +321,7 @@ const ProfilDetails = () => {
                   htmlFor="company_name"
                   className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
                 >
-                  Nom de l&pos;entreprise
+                  Nom de l&apos;entreprise
                 </label>
                 <input
                   type="text"
@@ -267,7 +330,6 @@ const ProfilDetails = () => {
                   placeholder="Nom de l'entreprise"
                   value={profile.company_name}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
@@ -282,10 +344,9 @@ const ProfilDetails = () => {
                   type="text"
                   id="address"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre adresse"
+                  placeholder="Adresse"
                   value={profile.address}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
@@ -300,35 +361,17 @@ const ProfilDetails = () => {
                   type="text"
                   id="domaine"
                   className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre domaine"
+                  placeholder="Domaine"
                   value={profile.domaine}
                   onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="bio"
-                  className="block mb-2 text-sm font-medium text-orange-900 dark:text-white"
-                >
-                  Biographie
-                </label>
-                <textarea
-                  id="bio"
-                  className="bg-orange-50 border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
-                  placeholder="Votre biographie"
-                  value={profile.bio}
-                  onChange={handleChange}
-                  rows="4"
                 />
               </div>
 
               <button
                 type="submit"
-                className="py-3.5 px-7 text-base font-medium text-white bg-orange-600 rounded-lg border border-orange-300 hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-200"
+                className="py-3.5 px-7 text-base font-medium text-orange-900 focus:outline-none bg-orange-100 rounded-lg border border-orange-200 hover:bg-orange-200 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-orange-200"
               >
-                Enregistrer les modifications
+                Mettre à jour le profil
               </button>
             </form>
           </div>

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
+import imagePath from '../configs/imageUrl';
 
 const JobCard = ({
   type,
@@ -15,7 +16,7 @@ const JobCard = ({
       <div className="relative">
         {imageUrl ? (
           <img
-            src={imageUrl}
+            src={`${imagePath}/${imageUrl}`}
             alt={title}
             className="w-full md:h-56 h-32 object-cover"
           />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
+import SkeletonJobCard from "./Skeleton"; 
 import axiosClient from "../axiosClient";
 import Pagination from "./Pagination";
 
@@ -26,10 +27,28 @@ const ServicesMaterial = () => {
     fetchServices();
   }, []);
 
-  if (loading) return <p className="mt-40">Loading...</p>;
+  if (loading) {
+    // Show Skeletons during loading
+    return (
+      <div className="my-20 flex justify-center items-center flex-col">
+        <h2
+          className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-600 pb-2"
+          style={{ fontFamily: "poetsen" }}
+        >
+          Services
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 w-3/4">
+          {Array.from({ length: postsPerPage }).map((_, index) => (
+            <SkeletonJobCard key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (error) return <p className="mt-40">Error: {error.message}</p>;
 
-  // Filter only "work" services
+  // Filter only "material" services
   const workServices = services.filter(
     (service) => service.service_type === "material"
   );

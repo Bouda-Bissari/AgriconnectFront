@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
   user: null,
-  // detail: null,
+  role: null,
   token: null,
   setUser: () => {},
   setToken: () => {},
@@ -10,10 +10,19 @@ const StateContext = createContext({
 
 // eslint-disable-next-line react/prop-types
 export const ContextProvider = ({ children }) => {
-  const [user, setUser] = useState({});
-  // const [detail] = useState({});
-
+  const [user, _setUser] = useState(JSON.parse(localStorage.getItem("USER_ID")) || {});
+  const [role, setRole] = useState({});
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+
+  const setUser = (user) => {
+    _setUser(user);
+
+    if (user && user.id) {
+      localStorage.setItem("USER_ID", JSON.stringify(user.id));
+    } else {
+      localStorage.removeItem("USER_ID");
+    }
+  };
 
   const setToken = (token) => {
     _setToken(token);
@@ -29,7 +38,8 @@ export const ContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         user,
-        // detail,
+        role,
+        setRole,
         setUser,
         token,
         setToken,
@@ -40,4 +50,4 @@ export const ContextProvider = ({ children }) => {
   );
 };
 
-export const useStateContext = () => useContext(StateContext);
+export const UserContext = () => useContext(StateContext);

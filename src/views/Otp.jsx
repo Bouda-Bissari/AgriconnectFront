@@ -1,14 +1,14 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useStateContext } from "../contexts/ContextProvider";
-import Axios from "../axiosClient.js";
+import { UserContext } from "../contexts/ContextProvider";
+import Axios from "../configs/axiosClient.js";
 
 const Otp = () => {
   const [otp, setOtp] = useState(Array(4).fill(""));
   const [message, setMessage] = useState("");
   const [sentOtp, setSentOtp] = useState("");
   const inputsRef = useRef([]);
-  const { user } = useStateContext();
+  const { user } = UserContext();
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigate = useNavigate();
 

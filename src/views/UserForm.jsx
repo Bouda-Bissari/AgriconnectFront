@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axiosClient from '../axiosClient';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axiosClient from "../configs/axiosClient";
 
 export default function UserForm() {
   const { id } = useParams();
@@ -8,12 +8,13 @@ export default function UserForm() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     id: null,
-    email: '',
-    password: '',
-    password_confirmation: '',
+    email: "",
+    password: "",
+    password_confirmation: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
   const [errors, setErrors] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const [message, setMessage] = useState("");
@@ -25,7 +26,7 @@ export default function UserForm() {
         .get(`/users/${id}`)
         .then(({ data }) => {
           setLoading(false);
-          setUser({ ...data, password: '', password_confirmation: '' });
+          setUser({ ...data, password: "", password_confirmation: "" });
         })
         .catch(() => {
           setLoading(false);
@@ -61,7 +62,11 @@ export default function UserForm() {
 
     request
       .then(() => {
-        setMessage(id ? "Utilisateur mis à jour avec succès." : "Utilisateur créé avec succès.");
+        setMessage(
+          id
+            ? "Utilisateur mis à jour avec succès."
+            : "Utilisateur créé avec succès."
+        );
         setLoading(false);
         navigate("/users");
       })
@@ -205,7 +210,11 @@ export default function UserForm() {
                         <button
                           type="button"
                           className="absolute right-2 top-2 text-gray-400"
-                          onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                          onClick={() =>
+                            setShowPasswordConfirmation(
+                              !showPasswordConfirmation
+                            )
+                          }
                         >
                           {showPasswordConfirmation ? (
                             <svg

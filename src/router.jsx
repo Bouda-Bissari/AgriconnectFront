@@ -23,6 +23,10 @@ import Services from "./components/Services.jsx";
 import Profil from "./views/Profil.jsx";
 import ProfilDetails from "./components/ProfilDetails.jsx";
 import DetailServices from "./views/DetailServices.jsx";
+import UserProfile from "./views/UserProfile.jsx";
+import DetailProfil from "./views/DetailProfil.jsx";
+import UserServices from "./components/UserServices.jsx";
+import CreateService from "./components/CreateService.jsx";
 
 const router = createBrowserRouter([
   {
@@ -53,10 +57,18 @@ const router = createBrowserRouter([
         path: "/detailservice/:jobId",
         element: <DetailServices />,
       },
+      {
+        path: "/detailprofil/:profilId",
+        element: <DetailProfil />,
+      },
 
       {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/createservice",
+        element: <CreateService />,
       },
 
       {
@@ -66,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/services",
         element: <Services />,
+      },
+      {
+        path: "/postulants",
+        element: <UserProfile />,
       },
     ],
   },
@@ -128,6 +144,10 @@ const router = createBrowserRouter([
       {
         path: "/profil/:userId",
         element: <ProfilDetails />,
+      },
+      {
+        path: "/user/:userId/services",
+        element: <UserServices />,
       },
     ],
   },

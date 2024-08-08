@@ -1,10 +1,10 @@
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useStateContext } from "../contexts/ContextProvider";
+import { UserContext } from "../contexts/ContextProvider";
 
 // eslint-disable-next-line react/prop-types
 function Hero() {
-  const { user, token } = useStateContext();
+  const { user, token } = UserContext();
   const isLoggedIn = !!token;
 
   useGSAP(() => {
@@ -92,14 +92,13 @@ function Hero() {
               <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row mb-6">
                 {isLoggedIn ? (
                   <>
-                  <a
-                    href= {`/profil/${user.id}`}
-                    className="block px-5 py-2 text-sm tracking-wider text-center text-white bg-[#4CAF50] hover:bg-[#43A047]/80 focus:ring-4 focus:outline-none focus:ring-[#43A047]/50 font-medium rounded-lg"
-                  >
-                    Mon profile
-                  </a>
-                 
-                </>
+                    <a
+                      href={`/profil/${user.id}`}
+                      className="block px-5 py-2 text-sm tracking-wider text-center text-white bg-[#4CAF50] hover:bg-[#43A047]/80 focus:ring-4 focus:outline-none focus:ring-[#43A047]/50 font-medium rounded-lg"
+                    >
+                      Mon profile
+                    </a>
+                  </>
                 ) : (
                   <>
                     <a
