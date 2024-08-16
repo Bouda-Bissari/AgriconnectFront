@@ -24,8 +24,7 @@ import person from './person.png';
 import not from './404.png';
 import logo from './logo.png';
 
-
-export {
+const images = {
     Image1,
     Image2,
     Image3,
@@ -51,5 +50,6 @@ export {
     person,
     not,
     logo
-
 };
+
+export default images;

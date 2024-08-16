@@ -4,7 +4,7 @@ import SkeletonJobCard from "./Skeleton";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom"; 
 
 const UserServices = () => {
   const { userId } = useParams();
@@ -13,7 +13,7 @@ const UserServices = () => {
   const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
+  const [postsPerPage] = useState(3);
 
   useEffect(() => {
     const fetchUserServices = async () => {
@@ -31,16 +31,16 @@ const UserServices = () => {
   }, [userId]);
 
   if (loading) {
-    // Show Skeletons during loading
+    // Chargement du skeleton 
     return (
       <div className="my-20 w-full flex justify-center items-center flex-col">
         <h2
           className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
           style={{ fontFamily: "poetsen" }}
         >
-          Services de l'utilisateur
+          Vos Offres misent en ligne
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+        <div className="grid grid-cols-2 md:grid-cols-3 xs:grid-cols-2 md:gap-20 gap-20 ">
           {Array.from({ length: postsPerPage }).map((_, index) => (
             <SkeletonJobCard key={index} />
           ))}
@@ -61,13 +61,13 @@ const UserServices = () => {
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
       >
-        Services de l'utilisateur
+        Vos Offres
       </h2>
 
       {services.length === 0 ? (
         <div className="flex flex-col bg-blue-950 p-10 rounded-xl items-center">
           <p className="text-lg font-semibold text-white  mb-4">
-            Vous n'avez encore posté aucune demande de main d'œuvre.
+            Vous n&apos;avez encore posté aucune Offre de main d&apos;œuvre.
           </p>
           <Link
             to="/post-service" // Adjust this route to your actual post service route
@@ -77,7 +77,7 @@ const UserServices = () => {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+        <div className="grid grid-cols-2 md:grid-cols-3 xs:grid-cols-2 md:gap-20 gap-20 ">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}
@@ -102,7 +102,7 @@ const UserServices = () => {
 
       <div className="flex justify-center mt-8">
         <Link
-          to="/post-service" // Adjust this route to your actual post service route
+          to="#" 
           className="px-4 py-2 bg-green-600 text-white rounded-xl"
         >
           Poster une offre

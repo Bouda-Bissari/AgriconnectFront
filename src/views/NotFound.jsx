@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { not } from "../assets/index.js";
+import images from "../assets/index.jsx";
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function NotFound() {
 
           <div className="flex items-center mt-6 gap-x-3">
             <button
-              onClick={() => navigate(-1)} 
+              onClick={() => navigate(-1)}
               className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700"
             >
               <svg
@@ -52,7 +52,7 @@ export default function NotFound() {
         <div className="relative w-full mt-8 lg:w-1/2 lg:mt-0">
           <img
             className="w-full lg:h-[32rem] h-80 md:h-96 rounded-lg object-cover"
-            src={not}
+            src={images.not}
             alt="Page non trouvée"
           />
         </div>

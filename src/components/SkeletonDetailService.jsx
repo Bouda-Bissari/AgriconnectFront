@@ -14,16 +14,16 @@ const SkeletonDetailService = () => {
               <div className="h-4 bg-gray-300 rounded w-1/4"></div>
               <div className="h-4 bg-gray-300 rounded w-1/4"></div>
             </div>
+            <div className="flex justify-center items-center flex-col gap-3">
             <div className="w-full h-40 bg-gray-300 mt-4 rounded-md"></div>
+            <div className="w-30 h-10 bg-gray-300 mt-4 rounded-md"></div>
+            </div>
+            
+
           </div>
           <div className="flex flex-col py-6 space-y-6 md:py-0 md:px-6">
-            <div className="h-6 bg-gray-300 rounded w-1/3"></div>
-            <div className="h-10 bg-gray-300 rounded w-full"></div>
-            <div className="h-6 bg-gray-300 rounded w-1/3"></div>
-            <div className="h-10 bg-gray-300 rounded w-full"></div>
-            <div className="h-6 bg-gray-300 rounded w-1/3"></div>
-            <div className="h-20 bg-gray-300 rounded w-full"></div>
-            <div className="h-10 bg-gray-300 rounded w-1/3 self-center"></div>
+            <div className="h-full w-full bg-gray-300 rounded"></div>
+            
           </div>
         </div>
       </section>

@@ -2,16 +2,17 @@ import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
   user: null,
-  role: null,
+  roles: [], 
   token: null,
   setUser: () => {},
+  setRoles: () => {}, 
   setToken: () => {},
 });
 
 // eslint-disable-next-line react/prop-types
 export const ContextProvider = ({ children }) => {
   const [user, _setUser] = useState(JSON.parse(localStorage.getItem("USER_ID")) || {});
-  const [role, setRole] = useState({});
+  const [roles, _setRoles] = useState(JSON.parse(localStorage.getItem("USER_ROLES")) || []);
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
   const setUser = (user) => {
@@ -21,6 +22,16 @@ export const ContextProvider = ({ children }) => {
       localStorage.setItem("USER_ID", JSON.stringify(user.id));
     } else {
       localStorage.removeItem("USER_ID");
+    }
+  };
+
+  const setRoles = (roles) => {
+    _setRoles(roles);
+
+    if (roles && roles.length > 0) {
+      localStorage.setItem("USER_ROLES", JSON.stringify(roles));
+    } else {
+      localStorage.removeItem("USER_ROLES");
     }
   };
 
@@ -38,8 +49,8 @@ export const ContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         user,
-        role,
-        setRole,
+        roles,
+        setRoles,
         setUser,
         token,
         setToken,

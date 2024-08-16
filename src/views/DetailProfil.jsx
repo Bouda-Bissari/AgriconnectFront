@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "../configs/axiosClient.js";
-import { person } from "../assets/index.js";
+import images from "../assets/index.jsx";
 import SkeletonDetailService from "../components/SkeletonDetailService.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 
@@ -17,7 +17,10 @@ const DetailProfil = () => {
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDifference = today.getMonth() - birthDate.getMonth();
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
@@ -74,7 +77,7 @@ const DetailProfil = () => {
           <div className="py-6 md:py-0 md:px-6">
             <div className="flex flex-col items-center mb-4">
               <img
-                src={avatar_url || person}
+                src={avatar_url || images.person}
                 alt="User Avatar"
                 className="object-center object-cover rounded-full h-36 w-36 mb-4"
               />
@@ -189,12 +192,11 @@ const DetailProfil = () => {
           </div>
           <div className="pt-6 md:pt-0 md:px-6">
             <img
-              src={avatar_url || person}
+              src={avatar_url || images.person}
               alt="User Avatar"
               className="object-center object-cover rounded w-full h-full"
             />
-        </div>
-
+          </div>
         </div>
       </section>
     </div>

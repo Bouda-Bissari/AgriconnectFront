@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "../configs/axiosClient.js";
-import { person } from "../assets/index.js";
+import images from "../assets/index.jsx";
 import SkeletonDetailService from "../components/SkeletonDetailService.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import imagePath from "../configs/imageUrl.js";
@@ -49,7 +49,7 @@ const DetailServices = () => {
 
   return (
     <div className="my-40">
-      <section className="container mx-auto rounded-sm py-6 dark:bg-orange-900 dark:text-white">
+      <section className="container mx-auto w-4/5 rounded-sm py-6 bg-green-900 text-white dark:bg-orange-900 dark:text-white">
         <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
           <div className="py-6 md:py-0 md:px-6">
             <h1
@@ -127,7 +127,7 @@ const DetailServices = () => {
               <button
                 type="button"
                 onClick={() => {}}
-                className="self-center font-bold px-5 py-2 w-full text-lg rounded focus:ring hover:ring focus:ring-opacity-75 dark:bg-green-600 dark:text-gray-50 focus:dark:ring-green-600 hover:dark:ring-green-600"
+                className="self-center font-bold px-5 py-2 w-full text-lg rounded focus:ring hover:ring focus:ring-opacity-75 bg-orange-600 text-gray-50 focus:ring-orange-600 hover:ring-orange-600"
               >
                 Postuler
               </button>
@@ -139,7 +139,7 @@ const DetailServices = () => {
               className="lg:block w-full h-full bg-cover bg-center"
               style={{
                 backgroundImage: `url('${
-                  image? `${imagePath}/${image}` : person
+                  image ? `${imagePath}/${image}` : images.person
                 }')`,
               }}
             >

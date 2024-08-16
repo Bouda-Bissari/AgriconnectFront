@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import axiosClient from "../configs/axiosClient.js";
 import { UserContext } from "../contexts/ContextProvider.jsx";
-import { Image12 } from "../assets/index.js";
+import images from "../assets/index.jsx";
 const Register = () => {
   const { role } = useParams();
 
@@ -77,7 +77,7 @@ const Register = () => {
       <div className="flex justify-center h-screen">
         <div
           className="hidden lg:block lg:w-2/3 bg-cover"
-          style={{ backgroundImage: `url(${Image12})` }}
+          style={{ backgroundImage: `url(${images.Image12})` }}
         >
           <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
             <div className="bg-black bg-opacity-40 rounded-xl p-5">

@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Image4 } from "../assets/index.js";
+import { Image4 } from "../assets/index.jsx";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 function Savoir() {

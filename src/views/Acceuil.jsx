@@ -1,11 +1,10 @@
 import Banner from "../components/Banner.jsx";
 import ForYou from "../components/ForYou.jsx";
 import Hero from "../components/Hero.jsx";
-import ProfilCard from "../components/ProfilCard.jsx";
-
-
+import CarouselPlugin from '../components/ui/mix/CarouselPlugin.jsx'
 import ServicesWork from "../components/ServicesWork.jsx";
-import Skeleton from "../components/Skeleton.jsx";
+import DisplayCandidature from "./DisplayCandidature.jsx";
+import SkeletonDetailCandidature from "@/components/SkeletonDetailCandidature .jsx";
 
 export function Acceuil() {
   // const handleScrollToSavoir = () => {
@@ -26,11 +25,19 @@ export function Acceuil() {
         <ServicesWork />
       </div>
       <div>
-        <ProfilCard />
+        <SkeletonDetailCandidature />
       </div>
+      
       <div>
-        <Skeleton />
+        <DisplayCandidature />
       </div>
+      
+     
+<div className="m-20">
+<CarouselPlugin/>
+
+</div>
+
       <div>
         <ForYou />
       </div>

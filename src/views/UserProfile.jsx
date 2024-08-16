@@ -3,7 +3,7 @@ import axios from "../configs/axiosClient.js";
 import ProfilCard from "../components/ProfilCard";
 import Pagination from "../components/Pagination";
 import SkeletonProfileCard from "../components/SkeletonProfileCard.jsx";
-import { person } from "../assets/index.js";
+import images from "../assets/index.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import { Navigate } from "react-router-dom";
 
@@ -69,7 +69,7 @@ const UserProfile = () => {
               phone_number={profile.phone_number}
               date={profile.details?.date || "Non disponible"}
               gender={profile.details?.gender || "Non disponible"}
-              avatar_url={profile.details?.avatar_url || person}
+              avatar_url={profile.details?.avatar_url || images.person}
               bio={profile.details?.bio || "Non disponible"}
               company_name={profile.details?.company_name || "Non disponible"}
               address={profile.details?.address || "Non disponible"}

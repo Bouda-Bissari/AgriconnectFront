@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { UserContext } from "../contexts/ContextProvider";
+import CarouselPlugin from "./ui/mix/CarouselPlugin";
 
 // eslint-disable-next-line react/prop-types
 function Hero() {
@@ -61,7 +62,7 @@ function Hero() {
           }`}
         />
 
-        <div className="lg:flex items-center justify-center relative z-10 ">
+        <div className="lg:flex items-center justify-center relative z-10 p-10 ">
           <div className="flex items-center justify-center w-full lg:w-1/2 gap-5 px-6 py-8 lg:min-h-[32rem]">
             <div className="max-w-xl ">
               <div
@@ -117,7 +118,7 @@ function Hero() {
           </div>
 
           {/* Galerie affichée sur les grands écrans */}
-          <div
+          {/* <div
             className={`hidden lg:block w-full lg:w-1/2 h-screen bg-cover bg-center ${
               isLoggedIn ? "bg-blue-900" : ""
             }`}
@@ -128,6 +129,10 @@ function Hero() {
             }}
           >
             <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40"></div>
+          </div> */}
+          <div className="w-1/2 mt-10">
+          <CarouselPlugin className="hidden lg:block w-full lg:w-1/2 h-screen bg-cover bg-center "/>
+
           </div>
         </div>
       </header>

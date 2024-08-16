@@ -27,6 +27,8 @@ import UserProfile from "./views/UserProfile.jsx";
 import DetailProfil from "./views/DetailProfil.jsx";
 import UserServices from "./components/UserServices.jsx";
 import CreateService from "./components/CreateService.jsx";
+import DetailCandidature from "./views/DetailCandidature.jsx";
+import DisplayCandidature from "./views/DisplayCandidature.jsx";
 
 const router = createBrowserRouter([
   {
@@ -149,6 +151,12 @@ const router = createBrowserRouter([
         path: "/user/:userId/services",
         element: <UserServices />,
       },
+      {
+        path: "/user/candiidature",
+        element: <DisplayCandidature />,
+      },
+
+       
     ],
   },
 

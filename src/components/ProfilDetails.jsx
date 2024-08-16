@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { person } from "../assets/index.js";
+import images from "../assets/index.jsx";
 import axios from "../configs/axiosClient.js";
 import { Navigate, useParams } from "react-router-dom";
 import { UserContext } from "../contexts/ContextProvider.jsx";
@@ -7,10 +7,6 @@ import { UserContext } from "../contexts/ContextProvider.jsx";
 const ProfilDetails = () => {
   const { userId } = useParams();
   const { token } = UserContext();
-
-  // if (!token) {
-  //   return <Navigate to={"/acceuil"} />;
-  // }
 
   const [profile, setProfile] = useState({
     email: "",
@@ -39,7 +35,7 @@ const ProfilDetails = () => {
           email: details.email || "",
           date: details.date || "",
           gender: details.gender || "",
-          avatar_url: details.avatar_url || person,
+          avatar_url: details.avatar_url || images.person,
           bio: details.bio || "",
           company_name: details.company_name || "",
           address: details.address || "",
@@ -122,7 +118,7 @@ const ProfilDetails = () => {
       console.log("sendingData", key, value);
     }
 
-    console.log(profile)
+    console.log(profile);
 
     axios
       .put(`/profile/${userId}`, profile)
@@ -150,14 +146,17 @@ const ProfilDetails = () => {
         );
       });
   };
-
+  //redirection d'un user non connecter
+  if (!token) {
+    return <Navigate to={"/acceuil"} />;
+  }
   const handleDeleteImage = () => {
     axios
       .delete(`/api/user/profile/${userId}/image`)
       .then(() => {
         setProfile((prevProfile) => ({
           ...prevProfile,
-          avatar_url: person,
+          avatar_url: images.person,
           imageFile: null,
         }));
         setSuccessMessage("Image supprimée avec succès.");
@@ -199,7 +198,7 @@ const ProfilDetails = () => {
             <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
               <img
                 className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-orange-300 dark:ring-green-500"
-                src={profile.avatar_url || person}
+                src={profile.avatar_url || images.person}
                 alt="Avatar avec bordure"
               />
 

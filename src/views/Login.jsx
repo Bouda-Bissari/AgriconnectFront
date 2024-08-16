@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../configs/axiosClient.js";
 import { UserContext } from "../contexts/ContextProvider";
-import { Image3 } from "../assets/index.js";
+import images from "../assets/index.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, setToken, setRole } = UserContext();
+  const { setUser, setToken, setRoles } = UserContext();
   const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
@@ -45,21 +45,11 @@ export default function Login() {
         console.log("Success:", data);
         setToken(data.token);
         setUser(data.user);
-        setRole(data.role);
-
-        // Redirection en fonction du rôle
-        // const role = data.role;
-        // if (role === "postulant") {
-        //   navigate(`/profil/${data.user.id}`);
-        // } else if (role === "demandeur") {
-        //   navigate(`/profil/${data.user.id}`);
-        // } else if (role === "admin") {
-        //   navigate(`/profil/admin/${data.user.id}`);
-        // } else if (role === "moderateur") {
-        //   navigate(`/profil/${data.user.id}`);
-        // } else {
+        setRoles(data.roles);
+        console.log(data.roles);
+        console.log(data);       
         navigate("/");
-        // }
+        
       })
       .catch((err) => {
         const response = err.response;
@@ -75,7 +65,7 @@ export default function Login() {
       <div className="flex justify-center h-screen">
         <div
           className="hidden lg:block lg:w-2/3 bg-cover"
-          style={{ backgroundImage: `url(${Image3})` }}
+          style={{ backgroundImage: `url(${images.Image3})` }}
         >
           <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
             <div className="bg-black bg-opacity-40 rounded-xl p-5">

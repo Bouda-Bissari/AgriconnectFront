@@ -5,16 +5,16 @@ import axiosClient from "../configs/axiosClient.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { logo } from "../assets/index.js";
+import images from "../assets/index.jsx";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { token, user, setUser, setToken, role } = UserContext();
+  const { token, user, setUser, setToken, roles = "" } = UserContext();
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
-
+  console.log(roles);
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
@@ -28,7 +28,7 @@ export default function Navbar() {
         setUser(data);
       });
     }
-  }, [setUser, token]);
+  }, [token]);
 
   const location = useLocation();
 
@@ -76,14 +76,17 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0">
+    <nav
+      className="bg-gray-900 dark:bg-gray-900 fixed w-full z-20 top-0 start-0"
+      style={{ fontFamily: "poetsen" }}
+    >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span
             className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white logo"
             style={{ fontFamily: "poetsen" }}
           >
-            <img src={logo} className="h-[4rem] w-[8rem]" alt="" />
+            <img src={images.logo} className="h-[4rem] w-[8rem]" alt="" />
           </span>
         </a>
         <div
@@ -255,7 +258,7 @@ export default function Navbar() {
               </Link>
             </li>
             {/* Conditional rendering based on role */}
-            {role === "demandeur" && (
+            {token && roles.includes('demandeur') && (
               <li>
                 <Link
                   id="link"
@@ -266,7 +269,7 @@ export default function Navbar() {
                 </Link>
               </li>
             )}
-            {role === "postulant" && (
+            {token && roles.includes('postulant') && (
               <li>
                 <Link
                   id="link"
