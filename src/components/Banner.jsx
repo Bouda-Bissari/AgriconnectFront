@@ -11,11 +11,11 @@ const Banner = () => {
             AgriConnect
           </p>
           <p className="md:text-2xl text-xl md:mb-5 mb-1 leading-none">
-            Favoriser l&apos;emploi agricole et connecter les acteurs du secteur
+            Favoriser l&apos;emploi  et connecter les acteurs du secteur agricole
           </p>
           <p className="md:text-lg md:mb-2">
             Notre mission est de faciliter les mises en relation entre
-            demandeurs d&apos;emplois, salariés agricoles et employeurs, tout en
+            exploitants agricoles, ouvriers agricoles e tout en
             offrant un service de qualité grâce à des gestionnaires
             professionnels régionaux.
           </p>
@@ -23,7 +23,7 @@ const Banner = () => {
             href="#"
             className="bg-green-600 md:py-4 py-1 md:px-8 px-4 text-white font-bold uppercase text-xs rounded hover:bg-green-700 hover:text-white"
           >
-            Contactez-nous
+            Contactez-nous 
           </a>
         </div>
       </div>

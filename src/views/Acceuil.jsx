@@ -5,6 +5,7 @@ import CarouselPlugin from '../components/ui/mix/CarouselPlugin.jsx'
 import ServicesWork from "../components/ServicesWork.jsx";
 import DisplayCandidature from "./DisplayCandidature.jsx";
 import SkeletonDetailCandidature from "@/components/SkeletonDetailCandidature .jsx";
+import { AlertDialogDemo } from "@/components/AlertDialogDemo.jsx";
 
 export function Acceuil() {
   // const handleScrollToSavoir = () => {
@@ -23,6 +24,9 @@ export function Acceuil() {
       </div>
       <div>
         <ServicesWork />
+      </div>
+      <div>
+        <AlertDialogDemo />
       </div>
       <div>
         <SkeletonDetailCandidature />

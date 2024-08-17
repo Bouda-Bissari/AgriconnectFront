@@ -3,9 +3,10 @@ import { UserContext } from "../contexts/ContextProvider";
 
 const SideProfil = () => {
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
-  const {  setUser, setToken, role } = UserContext();
+  const { setUser, setToken, roles } = UserContext();
   // const role = localStorage.getItem("USER_ROLE");
-  console.log(role);
+  console.log(roles);
+  console.log(userId);
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
@@ -23,7 +24,7 @@ const SideProfil = () => {
         >
           Votre Profil
         </a>
-        {role.includes('demandeur') && (
+        {roles.includes("demandeur") && (
           <a
             href={`/user/${userId}/services`}
             className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
@@ -32,12 +33,19 @@ const SideProfil = () => {
           </a>
         )}
         <a
-          href={`/user/${userId}/services`}
+          href="/user/candidature"
           className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
         >
-          Candidatures
+          Mes Candidatures
         </a>
 
+        
+        <a
+          href="/exploitant/candidature"
+          className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+        >
+          Candidatures recues
+        </a>
         <a
           href="/login"
           className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
@@ -56,7 +64,9 @@ const SideProfil = () => {
         >
           Logout
         </button>
+        
       </div>
+
     </div>
   );
 };

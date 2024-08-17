@@ -100,6 +100,9 @@ function Hero() {
                       Mon profile
                     </a>
                   </>
+
+
+
                 ) : (
                   <>
                     <a
@@ -114,6 +117,7 @@ function Hero() {
                   </>
                 )}
               </div>
+             
             </div>
           </div>
 

@@ -4,7 +4,6 @@ import SkeletonJobCard from "./Skeleton";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom"; 
 
 const UserServices = () => {
   const { userId } = useParams();
@@ -31,7 +30,7 @@ const UserServices = () => {
   }, [userId]);
 
   if (loading) {
-    // Chargement du skeleton 
+    // Chargement du skeleton
     return (
       <div className="my-20 w-full flex justify-center items-center flex-col">
         <h2
@@ -63,18 +62,20 @@ const UserServices = () => {
       >
         Vos Offres
       </h2>
+      <div className="flex justify-center mt-8">
+        <a
+          href="/createservice"
+          className="px-4 py-2 bg-green-600 text-white rounded-xl"
+        >
+          Poster une offre
+        </a>
+      </div>
 
       {services.length === 0 ? (
         <div className="flex flex-col bg-blue-950 p-10 rounded-xl items-center">
           <p className="text-lg font-semibold text-white  mb-4">
             Vous n&apos;avez encore posté aucune Offre de main d&apos;œuvre.
           </p>
-          <Link
-            to="/post-service" // Adjust this route to your actual post service route
-            className="px-4 py-2 bg-green-600 text-white rounded"
-          >
-            Poster une offre
-          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 xs:grid-cols-2 md:gap-20 gap-20 ">
@@ -99,15 +100,6 @@ const UserServices = () => {
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
       />
-
-      <div className="flex justify-center mt-8">
-        <Link
-          to="#" 
-          className="px-4 py-2 bg-green-600 text-white rounded-xl"
-        >
-          Poster une offre
-        </Link>
-      </div>
     </div>
   );
 };

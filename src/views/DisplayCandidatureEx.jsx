@@ -4,14 +4,12 @@ import DetailCandidature from "./DetailCandidature";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "../components/Pagination";
 import SkeletonDetailCandidature from "@/components/SkeletonDetailCandidature ";
-import { UserContext } from "@/contexts/ContextProvider";
-// import { AlertCompleted } from "@/components/AlertCompleted";
+import DetailCandidatureEx from "./DetailCandidatureEx";
 
-const DisplayCandidature = () => {
+const DisplayCandidatureEx = () => {
   const [candidatures, setCandidatures] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // const {  roles } = UserContext();
 
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,8 +25,8 @@ const DisplayCandidature = () => {
         //   setCandidatures(response.data);
         //   setLoading(false);
         //   } else if (roles.includes("postulant")) {
-          const response = await axiosClient.get(`/candidatures/user/${userId}`);
-          setCandidatures(response.data);
+        const response = await axiosClient.get(`/candidatures/service-owner/${userId}`);
+        setCandidatures(response.data);
           setLoading(false);
         // }
         
@@ -45,7 +43,6 @@ const DisplayCandidature = () => {
     return (
    
 <div className="my-20 w-full flex justify-center items-center flex-col">
-
         <h2
           className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
           style={{ fontFamily: "poetsen" }}
@@ -72,7 +69,6 @@ const DisplayCandidature = () => {
 
   return (
     <div className="my-20 flex justify-center items-center flex-col">
-
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
@@ -81,20 +77,17 @@ const DisplayCandidature = () => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-1 md:gap-10 gap-2 ">
         {currentPosts.map((candidature) => (
-         <DetailCandidature
+         <DetailCandidatureEx
          key={candidature.id}
          id={candidature.id}
          title={candidature.service.title}
          description={candidature.service.description}
-         location={candidature.service.location}
          image={candidature.service.image}
          price={candidature.service.price}
-         phoneNumber={candidature.service.user.phone_number}
-         email={candidature.service.user.details?.email || "Email non disponible"} 
+         phoneNumber={candidature.user.phone_number}
+         email={candidature.details?.email || "Email non disponible"} 
          create_at={candidature.created_at}
-         fullName={candidature.service.user.fullName}
-         deadline={candidature.service.deadline}
-         updated_at={candidature.updated_at}
+         fullName={candidature.user.fullName}
          message={candidature.message}
          status={candidature.status}
        />
@@ -111,4 +104,4 @@ const DisplayCandidature = () => {
   );
 };
 
-export default DisplayCandidature;
+export default DisplayCandidatureEx;

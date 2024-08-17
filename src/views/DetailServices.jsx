@@ -1,17 +1,33 @@
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "../configs/axiosClient.js";
 import images from "../assets/index.jsx";
 import SkeletonDetailService from "../components/SkeletonDetailService.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import imagePath from "../configs/imageUrl.js";
+import { PostulerDialog } from "@/components/PostulerDialog.jsx";
+import { AlertCompleted } from "@/components/AlertCompleted.jsx";
+
+// Fonction pour formater les prix en FCFA sans décimales
+const formatPrice = (price) => {
+  if (price === undefined || price === null) return "Prix non spécifié";
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "XOF", // Code pour le FCFA
+    minimumFractionDigits: 0, // Pas de décimales
+    maximumFractionDigits: 0,
+  }).format(price);
+};
 
 const DetailServices = () => {
-  const { jobId } = useParams(); // Get the jobId from the URL
+  const navigate = useNavigate();
+  const userId = JSON.parse(localStorage.getItem("USER_ID"));
+  const { jobId } = useParams();
   const [serviceData, setServiceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { token } = UserContext();
+  const [message, setMessage] = useState("");
+  const { user, token } = UserContext();
 
   useEffect(() => {
     axios
@@ -25,13 +41,29 @@ const DetailServices = () => {
         setLoading(false);
       });
   }, [jobId]);
+
+  const handlePostuler = () => {
+    axios
+      .post("/candidature", {
+        service_id: jobId,
+        message: message,
+      })
+      .then((response) => {
+        alert("Candidature créée avec succès");
+        console.log(response.data);
+        navigate(`/user/${userId}/services`);
+      })
+      .catch((error) => {
+        alert("Erreur lors de la création de la candidature: " + error.message);
+      });
+  };
+
   if (!token) {
     return <Navigate to={"/login"} />;
   }
+
   if (loading) {
-    if (loading) {
-      return <SkeletonDetailService />;
-    }
+    return <SkeletonDetailService />;
   }
 
   if (error) {
@@ -39,10 +71,10 @@ const DetailServices = () => {
   }
 
   if (!serviceData) {
-    return <p>Pas de serices disponibles</p>;
+    return <p>Pas de services disponibles</p>;
   }
 
-  // Destructure the data for easier access
+  // Destructurer les données pour un accès plus facile
   const { title, description, location, image, price } = serviceData.service;
   const { phone_number } = serviceData.service.user || {};
   const { email } = serviceData.profiles || {};
@@ -53,7 +85,7 @@ const DetailServices = () => {
         <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
           <div className="py-6 md:py-0 md:px-6">
             <h1
-              className="text-4xl text-center "
+              className="text-4xl text-center"
               style={{ fontFamily: "poetsen" }}
             >
               {title}
@@ -100,38 +132,50 @@ const DetailServices = () => {
                   <span className="font-bold">{email}</span>
                 </p>
               )}
-
               <p className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
                   className="w-5 h-5 mr-2 sm:mr-6"
                 >
-                  <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 0 111.414 1.414L11 8.414l4.293 4.293a1 1 0 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 0 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 0 010-1.414z"></path>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
+                  />
                 </svg>
-                <span className="font-bold">{price} FCFA</span>
+
+                <span className="font-bold">{formatPrice(price)}</span>
               </p>
             </div>
-            <form
-              noValidate=""
-              className="flex flex-col py-6 space-y-6 mt-3 md:py-0 md:px-6"
-            >
-              <label className="block">
-                <span className="mb-1">Message</span>
-                <textarea
-                  rows="3"
-                  className="block w-full rounded-md focus:ring focus:ring-opacity-75 focus:dark:ring-green-600 dark:bg-gray-100 text-black"
-                ></textarea>
-              </label>
-              <button
-                type="button"
-                onClick={() => {}}
-                className="self-center font-bold px-5 py-2 w-full text-lg rounded focus:ring hover:ring focus:ring-opacity-75 bg-orange-600 text-gray-50 focus:ring-orange-600 hover:ring-orange-600"
+
+            {user.is_completed ? (
+              <form
+                noValidate
+                className="flex flex-col py-6 space-y-6 mt-3 md:py-0 md:px-6"
               >
-                Postuler
-              </button>
-            </form>
+                <label className="block">
+                  <span className="mb-1">Message</span>
+                  <textarea
+                    rows="3"
+                    className="block w-full rounded-md focus:ring focus:ring-opacity-75 focus:dark:ring-green-600 dark:bg-gray-100 text-black"
+                    value={message} // Liaison du state au textarea
+                    onChange={(e) => setMessage(e.target.value)} // Mise à jour du state lors de la saisie
+                  ></textarea>
+                </label>
+                <PostulerDialog
+                  className="text-black"
+                  onConfirm={handlePostuler}
+                />
+              </form>
+            ) : (
+              <div className="mt-5">
+                <AlertCompleted />
+              </div>
+            )}
           </div>
 
           <div className="w-full h-full md:mt-2">

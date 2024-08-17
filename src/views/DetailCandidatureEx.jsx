@@ -23,43 +23,43 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const DetailCandidature = ({
+const DetailCandidatureEx = ({
   id,
   title,
   description,
-  location,
   image,
   price,
   phoneNumber,
   email,
   create_at,
   fullName,
-  deadline,
-  updated_at,
   message,
   status,
 }) => {
   const role = localStorage.getItem("USER_ROLES");
   console.log(role);
-
-
-  const cancelCandidature = async () => {
+  const updateStatus = async (newStatus) => {
     try {
       const response = await axiosClient.put(`/candidatures/${id}/status`, {
-        status: 'canceled',
+        status: newStatus,
       });
       alert(response.data.message);
       // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
     } catch (error) {
-      console.error('Erreur lors de l\'annulation de la candidature:', error);
+      console.error('Erreur lors de la mise à jour de la candidature:', error);
       alert('Une erreur est survenue. Veuillez réessayer.');
     }
   };
 
+  const handleAccept = () => updateStatus('approved');
+  const handleReject = () => updateStatus('rejected');
+
+
+
   return (
     <section className="container w-4/5 mx-auto rounded-sm py-6 bg-gray-900 dark:bg-gray-800 text-white dark:text-white">
-      <div className="grid max-w-6xl grid-cols-1 md:grid-cols-2 gap-8 px-6 mx-auto lg:px-8">
-        <div className="space-y-4">
+      <div className="grid max-w-6xl grid-cols-1 md:grid-cols-2 gap-8 px-1 mx-auto lg:px-8">
+        <div className="">
           <h1 className="text-4xl font-bold text-center font-poetsen">
             {title || "Titre non disponible"}
           </h1>
@@ -68,24 +68,6 @@ const DetailCandidature = ({
           </p>
 
           <div className="space-y-1">
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              <span className="font-bold">
-                {location || "Localisation non spécifiée"}
-              </span>
-            </div>
-
             {phoneNumber && (
               <div className="flex items-center">
                 <svg
@@ -114,23 +96,24 @@ const DetailCandidature = ({
                 <span className="font-bold">{email}</span>
               </div>
             )}
-            <div className="flex justify-center mt-6 p-3">
+
+            <div className="flex justify-center mt-5 pt-3">
             <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded"
-                onClick={cancelCandidature}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-4 rounded-xl"
+                onClick={handleAccept}
               >
-                Annuler
+                Accepter
               </button>
               <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => alert("Modifier la candidature")}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl"
+                onClick={handleReject}
               >
-                Modifier
+                Rejeter
               </button>
             </div>
           </div>
         </div>
-        <div>
+        <div className="flex flex-col justify-center items-center">
           {image ? (
             <img
               src={`${imagePath}/${image}`}
@@ -162,7 +145,7 @@ const DetailCandidature = ({
                   ? "Acceptée"
                   : status === "rejected"
                   ? "Rejetée"
-                  : status === "canceled"
+                  : status === "cancelee"
                   ? "Annuler"
                   : "En attente"}
               </p>
@@ -230,50 +213,10 @@ const DetailCandidature = ({
               <span className="font-bold">{formatPrice(price)}</span>
             </div>
           )}
-
-          {deadline && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5 5h10a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zm-1 4h12V7H4v2zm0 2v2h12v-2H4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-bold">
-                Date limite : {formatDate(deadline)}
-              </span>
-            </div>
-          )}
-
-          {updated_at && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6 2a1 1 0 011 1v1h6V3a1 1 0 112 0v1a1 1 0 001 1h2a1 1 0 011 1v11a2 2 0 01-2 2H4a2 2 0 01-2-2V6a1 1 0 011-1h2a1 1 0 001-1V3a1 1 0 011-1zm1 5a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1V8a1 1 0 00-1-1H7zm1 2a1 1 0 011-1h2a1 1 0 011 1v1a1 1 0 01-1 1H9a1 1 0 01-1-1V9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-bold">
-                Dernière mise à jour : {formatDate(updated_at)}
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </section>
   );
 };
 
-export default DetailCandidature;
+export default DetailCandidatureEx;

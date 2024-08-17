@@ -72,7 +72,7 @@ const DetailProfil = () => {
 
   return (
     <div className="my-40">
-      <section className="container mx-auto rounded-sm py-6 dark:bg-orange-900 dark:text-white">
+      <section className="container w-4/5 mx-auto rounded-sm py-6 bg-orange-900 text-white dark:bg-orange-900 dark:text-white">
         <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
           <div className="py-6 md:py-0 md:px-6">
             <div className="flex flex-col items-center mb-4">
@@ -123,11 +123,16 @@ const DetailProfil = () => {
                 <p className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
+                    width="16"
+                    height="16"
                     fill="currentColor"
-                    className="w-5 h-5 mr-2 sm:mr-6"
+                    className="font-bold w-5 h-5 mr-2 sm:mr-6"
+                    viewBox="0 0 16 16"
                   >
-                    <path d="M10 3a7 7 0 100 14 7 7 0 000-14zM10 9a1 1 0 110-2 1 1 0 010 2zm1 3a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                    <path
+                      fillRule="evenodd"
+                      d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"
+                    />
                   </svg>
                   <span className="font-bold">{gender}</span>
                 </p>
@@ -136,12 +141,19 @@ const DetailProfil = () => {
                 <p className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
                     className="w-5 h-5 mr-2 sm:mr-6"
                   >
-                    <path d="M9.293 4.293a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L10 6.414 6.707 9.707a1 1 0 01-1.414-1.414l4-4z"></path>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                    />
                   </svg>
+
                   <span className="font-bold">{age} ans</span>
                 </p>
               )}
@@ -149,12 +161,19 @@ const DetailProfil = () => {
                 <p className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="w-5 h-5 mr-2 sm:mr-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-15"
                   >
-                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"></path>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                    />
                   </svg>
+
                   <span className="font-bold">{bio}</span>
                 </p>
               )}
@@ -162,12 +181,19 @@ const DetailProfil = () => {
                 <p className="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
                     className="w-5 h-5 mr-2 sm:mr-6"
                   >
-                    <path d="M4 4a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
+                    />
                   </svg>
+
                   <span className="font-bold">{company_name}</span>
                 </p>
               )}

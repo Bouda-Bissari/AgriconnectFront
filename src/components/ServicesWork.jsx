@@ -3,6 +3,8 @@ import JobCard from "./JobCard";
 import SkeletonJobCard from "./Skeleton"; // Import the Skeleton component
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
+import { AlertCompleted } from "./AlertCompleted";
+import { UserContext } from "@/contexts/ContextProvider";
 
 const ServicesWork = () => {
   const [services, setServices] = useState([]);
@@ -11,6 +13,9 @@ const ServicesWork = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
+
+  const {  token } = UserContext();
+  const isLoggedIn = !!token;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -59,6 +64,7 @@ const ServicesWork = () => {
 
   return (
     <div className="my-20 w-full flex justify-center items-center flex-col">
+      {isLoggedIn && <AlertCompleted />}
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
