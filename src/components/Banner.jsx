@@ -11,19 +11,19 @@ const Banner = () => {
             AgriConnect
           </p>
           <p className="md:text-2xl text-xl md:mb-5 mb-1 leading-none">
-            Favoriser l&apos;emploi  et connecter les acteurs du secteur agricole
+            Favoriser l&apos;emploi et connecter les acteurs dans le secteur
+            agricole
           </p>
-          <p className="md:text-lg md:mb-2">
+          <p className="md:text-lg md:mb-4">
             Notre mission est de faciliter les mises en relation entre
-            exploitants agricoles, ouvriers agricoles e tout en
-            offrant un service de qualité grâce à des gestionnaires
-            professionnels régionaux.
+            exploitants agricoles et ouvriers agricoles, en créant un réseau
+            solide et efficace pour soutenir l&apos;agriculture locale.
           </p>
           <a
-            href="#"
-            className="bg-green-600 md:py-4 py-1 md:px-8 px-4 text-white font-bold uppercase text-xs rounded hover:bg-green-700 hover:text-white"
+            href="mailto:jeanmariebissari@gmail.com?subject=Demande de contact&body=Bonjour, j'aimerais en savoir plus sur Agriconnect."
+            className="bg-green-600 md:py-4 py-1   md:px-8 px-4 text-white font-bold uppercase text-xs rounded hover:bg-green-700 hover:text-white"
           >
-            Contactez-nous 
+            Contactez-nous
           </a>
         </div>
       </div>

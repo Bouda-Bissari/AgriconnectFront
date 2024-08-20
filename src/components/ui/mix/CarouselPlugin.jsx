@@ -1,6 +1,6 @@
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
-import images from '../../../assets/index'; // Assurez-vous que le chemin est correct
+import images from "../../../assets/index"; // Assurez-vous que le chemin est correct
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -16,8 +16,16 @@ export default function CarouselPlugin() {
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
-  // Convertir les images en tableau de valeurs pour faciliter l'accès (hum c'est compliquer)
-  const imageArray = Object.values(images);
+  // Définissez un tableau d'images spécifiques
+  const specificImages = [
+    images.Hero1,
+    images.Hero2,
+    images.Hero3,
+    images.Hero4,
+    images.Hero5,
+    images.Hero6,
+    images.Hero7,
+  ];
 
   return (
     <Carousel
@@ -27,25 +35,20 @@ export default function CarouselPlugin() {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => {
-          // Sélectionner une image aléatoire
-          const randomImage = imageArray[Math.floor(Math.random() * imageArray.length)];
-          
-          return (
-            <CarouselItem key={index}>
-              <div className="p-1">
-                <Card>
-                  <CardContent className="flex aspect-square items-center justify-center border-none m-0 p-0">
-                    <img src={randomImage} alt={`Image ${index + 1}`} className="object-cover w-full h-full" />
-                  </CardContent>
-                </Card>
-              </div>
-            </CarouselItem>
-          );
-        })}
+        {specificImages.map((image, index) => (
+          <CarouselItem key={index} className="border-none">
+            <div className="p-1">
+              <Card className="border-none">
+                <CardContent className="flex aspect-square items-center justify-center border-none m-0 p-0">
+                  <img src={image} alt={`Image ${index + 1}`} className="object-cover w-full h-full rounded-xl" />
+                </CardContent>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      {/* <CarouselPrevious />
+      <CarouselNext /> */}
     </Carousel>
   );
 }

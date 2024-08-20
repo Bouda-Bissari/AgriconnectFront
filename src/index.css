@@ -7,6 +7,10 @@
   font-family: "poetsen";
   src: url("./fonts/poetsen.ttf");
 }
+@font-face {
+  font-family: "cabinet";
+  src: url("./fonts/cabinet.ttf");
+}
 
 @layer base {
   :root {
@@ -71,5 +75,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'cabinet';
   }
 }

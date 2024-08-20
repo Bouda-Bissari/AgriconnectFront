@@ -2,19 +2,14 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import axiosClient from "../configs/axiosClient.js";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import images from "../assets/index.jsx";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { token, user, setUser, setToken, roles = "" } = UserContext();
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
-  console.log(roles);
+
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
@@ -33,9 +28,9 @@ export default function Navbar() {
   const location = useLocation();
 
   const isActive = (path) => {
-    return location.pathname === path
-      ? "block py-2 px-3 text-white bg-orange-700 hover:bg-orange-800 focus:outline-none focus:ring-orange-300 font-medium rounded-lg md:bg-orange-500 md:text-white md:p-2 md:dark:text-white p-4"
-      : "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-2 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 p-4";
+    return location.pathname.startsWith(path)
+      ? "block py-2 px-3 text-white bg-orange-700 hover:bg-orange-800 focus:outline-none focus:ring-4 focus:ring-orange-300 font-medium rounded-lg md:bg-orange-500 md:text-white md:p-2 md:dark:text-white"
+      : "block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-2 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white";
   };
 
   const toggleMenu = () => {
@@ -47,72 +42,33 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // Fermer les menus lorsque la route change
+    // Close menus on route change
     setIsOpen(false);
     setIsUserMenuOpen(false);
   }, [location.pathname]);
 
-  useGSAP(() => {
-    // Animation
-    var tl = gsap.timeline();
-    tl.from(".logo", {
-      y: -60,
-      duration: 1,
-      delay: 0.5,
-      ease: "power1.inOut",
-    }).from("#link", {
-      y: -60,
-      duration: 1,
-      delay: 0.5,
-      stagger: 0.2,
-    });
-    gsap.from("#title", {
-      y: 20,
-      opacity: 0,
-      duration: 1,
-      delay: 0.5,
-      scale: 0.2,
-    });
-  }, []);
-
   return (
-    <nav
-      className="bg-gray-900 dark:bg-gray-900 fixed w-full z-20 top-0 start-0"
-      style={{ fontFamily: "poetsen" }}
-    >
+    <nav className="bg-white p-0 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 shadow-md " style={{ fontFamily: "poetsen" }}>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <span
-            className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white logo"
-            style={{ fontFamily: "poetsen" }}
-          >
-            <img src={images.logo} className="h-[4rem] w-[8rem]" alt="" />
-          </span>
-        </a>
-        <div
-          className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
-          style={{ fontFamily: "poetsen" }}
-        >
+        <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <img src={images.logo} className="h-[3rem] w-[6rem]" alt="Logo" />
+        </Link>
+        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           {token ? (
             <div className="relative">
               <button
                 type="button"
                 onClick={toggleUserMenu}
-                className="flex text-sm bg-white rounded-full focus:ring-4 focus:ring-green-300 dark:focus:ring-green-600"
+                className="flex items-center justify-center w-10 h-10 bg-orange-600 rounded-full focus:ring-4 focus:ring-green-300 dark:focus:ring-green-600"
                 aria-expanded={isUserMenuOpen}
               >
-                {/* <img
-                  className="w-8 h-8 rounded-full"
-                  src={user.avatar_url || "https://via.placeholder.com/40"}
-                  alt="User Avatar"
-                /> */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-6"
+                  className="w-6 h-6 text-white  dark:text-white"
                 >
                   <path
                     strokeLinecap="round"
@@ -120,23 +76,15 @@ export default function Navbar() {
                     d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                   />
                 </svg>
-
                 <span className="sr-only">Open user menu</span>
               </button>
               {isUserMenuOpen && (
-                <div
-                  className="z-50 absolute right-0 my-4 p-5 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="user-dropdown"
-                >
-                  <div className="py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">
-                      {user.fullName}
-                    </span>
-                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                      {user.email}
-                    </span>
+                <div className="absolute right-0 mt-2 w-48 bg-gray-200 divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 z-50">
+                  <div className="py-3 px-4">
+                    <span className="block text-sm text-gray-900 dark:text-white">{user.fullName}</span>
+                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">{user.email}</span>
                   </div>
-                  <ul className="py-2" aria-labelledby="user-menu-button">
+                  <ul className="py-2">
                     <li>
                       <Link
                         to={`/profil/${userId}`}
@@ -160,23 +108,20 @@ export default function Navbar() {
           ) : (
             <div className="flex space-x-2">
               <Link
-                id="link"
                 to="/login"
-                className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800"
+                className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700"
               >
                 Se Connecter
               </Link>
               <Link
-                id="link"
                 to="/choix"
-                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700"
               >
                 S&apos;inscrire
               </Link>
             </div>
           )}
           <button
-            data-collapse-toggle="navbar-sticky"
             type="button"
             onClick={toggleMenu}
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -202,74 +147,53 @@ export default function Navbar() {
           </button>
         </div>
         <div
-          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
-            isOpen ? "block" : "hidden"
-          }`}
+          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${isOpen ? "block" : "hidden"}`}
           id="navbar-sticky"
         >
-          <ul
-            className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
-            style={{ fontFamily: "poetsen" }}
-          >
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-green-800 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <Link
                 to="/acceuil"
                 id="link"
                 className={isActive("/acceuil")}
-                aria-current={location.pathname === "/" ? "page" : undefined}
+                aria-current={location.pathname.startsWith("/acceuil") ? "page" : undefined}
               >
-                Home
+                Accueil
               </Link>
             </li>
             <li>
               <Link
-                id="link"
                 to="/services"
+                id="link"
                 className={isActive("/services")}
-                aria-current={
-                  location.pathname === "/services" ? "page" : undefined
-                }
+                aria-current={location.pathname.startsWith("/services") ? "page" : undefined}
               >
-                Offres
+                Publications
               </Link>
             </li>
             <li>
               <Link
+                to="/ouvriers"
                 id="link"
-                to="/postulants"
-                className={isActive("/postulants")}
-                aria-current={
-                  location.pathname === "/postulants" ? "page" : undefined
-                }
+                className={isActive("/ouvriers")}
+                aria-current={location.pathname.startsWith("/ouvriers") ? "page" : undefined}
               >
-                Candidats
+                Ouvriers
               </Link>
             </li>
-            <li>
-              <Link
-                to="/users"
-                id="link"
-                className={isActive("/users")}
-                aria-current={
-                  location.pathname === "/users" ? "page" : undefined
-                }
-              >
-                Users
-              </Link>
-            </li>
-            {/* Conditional rendering based on role */}
-            {token && roles.includes('demandeur') && (
+
+            {token && roles.includes("exploitant") && (
               <li>
                 <Link
                   id="link"
-                  to="/create-offer"
-                  className={isActive("/create-offer")}
+                  to="/profil/createservice"
+                  className={isActive("/profil/createservice")}
                 >
-                  Créer une offre
+                  Poster offre
                 </Link>
               </li>
             )}
-            {token && roles.includes('postulant') && (
+            {token && roles.includes("ouvrier") && (
               <li>
                 <Link
                   id="link"
@@ -283,14 +207,12 @@ export default function Navbar() {
             {token && (
               <li>
                 <Link
-                  to="/profile"
+                  to="/profil"
                   id="link"
-                  className={isActive("/profile")}
-                  aria-current={
-                    location.pathname === "/profile" ? "page" : undefined
-                  }
+                  className={isActive("/profil")}
+                  aria-current={location.pathname.startsWith("/profil") ? "page" : undefined}
                 >
-                  {user.name}
+                  Mon Profil
                 </Link>
               </li>
             )}

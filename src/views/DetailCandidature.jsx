@@ -23,6 +23,33 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
+const StatusBadge = ({ status }) => {
+  const statusStyles = {
+    accepted: "bg-green-500 text-white",
+    rejected: "bg-red-500 text-white",
+    canceled: "bg-yellow-500 text-black",
+    pending: "bg-gray-500 text-white",
+  };
+
+  return (
+    <div
+      className={`w-full h-ful p-20 flex items-center justify-center text-2xl rounded  font-semibold ${
+        statusStyles[status] || "bg-gray-500 text-white"
+      }`}
+      style={{ fontFamily: "poetsen" }}
+    >
+      {status === "accepted"
+        ? "Acceptée"
+        : status === "rejected"
+        ? "Rejetée"
+        : status === "canceled"
+        ? "Annulée"
+        : "En attente"}
+      {/* <img src={images.canceled} className="w-full h-56 object-cover rounded-lg" alt="" /> */}
+    </div>
+  );
+};
+
 const DetailCandidature = ({
   id,
   title,
@@ -39,49 +66,88 @@ const DetailCandidature = ({
   message,
   status,
 }) => {
-  const role = localStorage.getItem("USER_ROLES");
-  console.log(role);
-
-
   const cancelCandidature = async () => {
     try {
       const response = await axiosClient.put(`/candidatures/${id}/status`, {
-        status: 'canceled',
+        status: "canceled",
       });
       alert(response.data.message);
       // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
     } catch (error) {
-      console.error('Erreur lors de l\'annulation de la candidature:', error);
-      alert('Une erreur est survenue. Veuillez réessayer.');
+      console.error("Erreur lors de l'annulation de la candidature:", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    }
+  };
+
+  const renderButton = () => {
+    switch (status) {
+      case "accepted":
+        return (
+          <button
+            disabled
+            className="bg-green-600 text-white py-2 px-4 rounded w-full"
+          >
+            Acceptée
+          </button>
+        );
+      case "rejected":
+        return (
+          <button
+            disabled
+            className="bg-red-600 text-white py-2 px-4 rounded w-3/4"
+          >
+            Rejetée
+          </button>
+        );
+      case "canceled":
+        return (
+          <button
+            disabled
+            className="bg-yellow-600 text-white py-2 px-4 rounded w-full"
+          >
+            Annulée
+          </button>
+        );
+      case "pending":
+        return (
+          <button
+            onClick={cancelCandidature}
+            className="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded w-full"
+          >
+            En attente
+          </button>
+        );
+      default:
+        return null;
     }
   };
 
   return (
-    <section className="container w-4/5 mx-auto rounded-sm py-6 bg-gray-900 dark:bg-gray-800 text-white dark:text-white">
-      <div className="grid max-w-6xl grid-cols-1 md:grid-cols-2 gap-8 px-6 mx-auto lg:px-8">
+    <section className="container w-4/5 mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-center font-poetsen">
+          <h1 className="text-4xl font-bold" style={{ fontFamily: "poetsen" }}>
             {title || "Titre non disponible"}
           </h1>
-          <p className="text-center text-lg">
+          <p className="text-lg">
             {description || "Description non disponible"}
           </p>
 
-          <div className="space-y-1">
+          <div className="space-y-2 ">
             <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
+                className="w-5 h-5 mr-2 text-gray-400"
               >
                 <path
                   fillRule="evenodd"
                   d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                   clipRule="evenodd"
-                ></path>
+                />
               </svg>
-              <span className="font-bold">
+              <span className="font-semibold">
                 {location || "Localisation non spécifiée"}
               </span>
             </div>
@@ -92,11 +158,11 @@ const DetailCandidature = ({
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
+                  className="w-5 h-5 mr-2 text-gray-400"
                 >
-                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
-                <span className="font-bold">{phoneNumber}</span>
+                <span className="font-semibold">{phoneNumber}</span>
               </div>
             )}
 
@@ -106,168 +172,239 @@ const DetailCandidature = ({
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
+                  className="w-5 h-5 mr-2 text-gray-400"
                 >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                <span className="font-bold">{email}</span>
+                <span className="font-semibold">{email}</span>
               </div>
             )}
-            <div className="flex justify-center mt-6 p-3">
-            <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded"
-                onClick={cancelCandidature}
-              >
-                Annuler
-              </button>
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => alert("Modifier la candidature")}
-              >
+            {(status == "canceled" || status == "rejected") && (
+              <div className="space-y-2">
+                {status && (
+                  <div className="flex justify-center items-center gap-3 ">
+                    {renderButton()}
+                    <button className="bg-orange-500 rounded p-2 flex justify-center items-center">
+                      <svg
+                        fill="#ffffff"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        stroke="#ffffff"
+                        className="size-6"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <path d="M5.755,20.283,4,8H20L18.245,20.283A2,2,0,0,1,16.265,22H7.735A2,2,0,0,1,5.755,20.283ZM21,4H16V3a1,1,0,0,0-1-1H9A1,1,0,0,0,8,3V4H3A1,1,0,0,0,3,6H21a1,1,0,0,0,0-2Z"></path>
+                        </g>
+                      </svg>
+                      Supprimer
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {status !== "canceled" && status !== "rejected" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex flex-col space-y-4">
+                  {create_at && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+                        />
+                      </svg>
+                      <span className="font-semibold">
+                        Postuler le : {formatDate(create_at)}
+                      </span>
+                    </div>
+                  )}
+
+                  {message && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        className="w-5 h-5 mr-2 text-gray-400"
+                      >
+                        <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 111.414 1.414L11 8.414l4.293 4.293a1 1 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 010-1.414z" />
+                      </svg>
+                      <span className="font-semibold">Message : {message}</span>
+                    </div>
+                  )}
+
+                  {fullName && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                        />
+                      </svg>
+                      <span className="font-semibold">Nom : {fullName}</span>
+                    </div>
+                  )}
+
+                  {price && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
+                        />
+                      </svg>
+                      <span className="font-semibold">
+                        Prix : {formatPrice(price)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col space-y-4">
+                  {deadline && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                        />
+                      </svg>
+                      <span className="font-semibold">
+                        Date limite : {formatDate(deadline)}
+                      </span>
+                    </div>
+                  )}
+
+                  {updated_at && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                        />
+                      </svg>
+                      <span className="font-semibold">
+                        Mis à jour le : {formatDate(updated_at)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {status !== "canceled" && status !== "rejected" && (
+              <div className="flex gap-4 mt-6">
+                <button
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold flex justify-center items-center gap-1 py-1 rounded w-full"
+                  onClick={cancelCandidature}
+                >
+                  <svg
+                    width="204px"
+                    height="204px"
+                    viewBox="0 -0.5 17 17"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#ffffff"
+                    stroke="#ffffff"
+                    className="size-6"
+                  >
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <title>799</title> <defs> </defs>{" "}
+                      <g
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        {" "}
+                        <path
+                          d="M9.016,0.06 C4.616,0.06 1.047,3.629 1.047,8.029 C1.047,12.429 4.615,15.998 9.016,15.998 C13.418,15.998 16.985,12.429 16.985,8.029 C16.985,3.629 13.418,0.06 9.016,0.06 L9.016,0.06 Z M3.049,8.028 C3.049,4.739 5.726,2.062 9.016,2.062 C10.37,2.062 11.616,2.52 12.618,3.283 L4.271,11.631 C3.508,10.629 3.049,9.381 3.049,8.028 L3.049,8.028 Z M9.016,13.994 C7.731,13.994 6.544,13.583 5.569,12.889 L13.878,4.58 C14.571,5.555 14.982,6.743 14.982,8.028 C14.981,11.317 12.306,13.994 9.016,13.994 L9.016,13.994 Z"
+                          fill="#ffffff"
+                          className="si-glyph-fill"
+                        >
+                          {" "}
+                        </path>{" "}
+                      </g>{" "}
+                    </g>
+                  </svg>
+                  Annuler
+                </button>
+                {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                 Modifier
-              </button>
-            </div>
+              </button> */}
+              </div>
+            )}
           </div>
         </div>
-        <div>
-          {image ? (
-            <img
-              src={`${imagePath}/${image}`}
-              alt={title}
-              className="w-full md:h-56 h-32 object-cover"
-            />
-          ) : (
-            <img
-              src={images.person}
-              alt={title}
-              className="w-full md:h-56 h-32 object-cover"
-            />
-          )}
 
-          {status && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-              </svg>
-              <p>
-                <strong>Statut:</strong>{" "}
-                {status === "approved"
-                  ? "Acceptée"
-                  : status === "rejected"
-                  ? "Rejetée"
-                  : status === "canceled"
-                  ? "Annuler"
-                  : "En attente"}
-              </p>
-            </div>
-          )}
-
-          {create_at && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 111.414 1.414L11 8.414l4.293 4.293a1 1 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 010-1.414z"></path>
-              </svg>
-              <span className="font-bold">
-                Postuler le : {formatDate(create_at)}
-              </span>
-            </div>
-          )}
-
-          {message && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 111.414 1.414L11 8.414l4.293 4.293a1 1 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 010-1.414z"></path>
-              </svg>
-              <span className="font-bold">Message : {message}</span>
-            </div>
-          )}
-
-          {fullName && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path d="M10 2a2 2 0 00-2 2v4.586l-3.293-3.293a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 001.414 1.414L8 12.414V17a2 2 0 002 2h4a2 2 0 002-2v-4.586l3.293 3.293a1 1 001.414-1.414L11.414 10l4.293-4.293a1 1 00-1.414-1.414L10 8.586V4a2 2 0 00-2-2h-4z" />
-              </svg>
-              <span className="font-bold">{fullName}</span>
-            </div>
-          )}
-
-          {price && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 10a7 7 0 1114 0 7 7 0 01-14 0zm5 3a1 1 0 000-2H5a1 1 0 000 2h3zm7-3a1 1 0 100-2h-1a1 1 0 100 2h1zm-6 2a1 1 0 100-2H6a1 1 0 000 2h2zm1 1a1 1 0 100-2H7a1 1 0 000 2h2zm2 1a1 1 0 100-2H8a1 1 0 000 2h2zm0-7a1 1 0 100-2H6a1 1 0 000 2h2zm0 2a1 1 0 100-2H7a1 1 0 000 2h2zm2 1a1 1 0 100-2H9a1 1 0 000 2h2zm0 2a1 1 0 100-2h-1a1 1 0 100 2h1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-bold">{formatPrice(price)}</span>
-            </div>
-          )}
-
-          {deadline && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5 5h10a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zm-1 4h12V7H4v2zm0 2v2h12v-2H4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-bold">
-                Date limite : {formatDate(deadline)}
-              </span>
-            </div>
-          )}
-
-          {updated_at && (
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6 2a1 1 0 011 1v1h6V3a1 1 0 112 0v1a1 1 0 001 1h2a1 1 0 011 1v11a2 2 0 01-2 2H4a2 2 0 01-2-2V6a1 1 0 011-1h2a1 1 0 001-1V3a1 1 0 011-1zm1 5a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1V8a1 1 0 00-1-1H7zm1 2a1 1 0 011-1h2a1 1 0 011 1v1a1 1 0 01-1 1H9a1 1 0 01-1-1V9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-bold">
-                Dernière mise à jour : {formatDate(updated_at)}
-              </span>
+        <div className="space-y-4">
+          <img
+            src={image ? `${imagePath}/${image}` : images.person}
+            alt={title}
+            className="w-full h-56 object-cover rounded-lg"
+          />
+          {status !== "canceled" && status !== "rejected" && (
+            <div className="space-y-2">
+              {status && (
+                <div className="flex justify-center">
+                  <StatusBadge status={status} />
+                </div>
+              )}
             </div>
           )}
         </div>

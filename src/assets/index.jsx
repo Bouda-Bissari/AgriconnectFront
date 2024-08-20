@@ -23,7 +23,19 @@ import Image23 from './Image23.jpg';
 import person from './person.png';
 import not from './404.png';
 import logo from './logo.png';
+import canceled from './canceled.png';
+import Hero1 from "./Hero1.jpeg"
+import Hero2 from "./Hero2.jpeg"
+import Hero3 from "./Hero3.jpeg"
+import Hero4 from "./Hero4.jpeg"
+import Hero5 from "./Hero5.jpeg"
+import Hero6 from "./Hero6.jpeg"
+import Hero7 from "./Hero7.jpeg"
+import Hero8 from "./Hero8.jpeg"
+import Hero9 from "./Hero9.jpeg"
+import Hero10 from "./Hero10.jpeg"
 
+// import canceled  './canceled.png';
 const images = {
     Image1,
     Image2,
@@ -49,7 +61,23 @@ const images = {
     Image23,
     person,
     not,
-    logo
+    logo,
+    canceled,
+
+
+    Hero1,
+    Hero2,
+    Hero3,
+    Hero4,
+    Hero5,
+    Hero6,
+    Hero7,
+    Hero8,
+    Hero9,
+    Hero10,
+
+
+
 };
 
 export default images;

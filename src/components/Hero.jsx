@@ -1,7 +1,9 @@
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { UserContext } from "../contexts/ContextProvider";
-import CarouselPlugin from "./ui/mix/CarouselPlugin";
+import { lazy, Suspense } from "react";
+import Loading from "./Loading";
+const CarouselPlugin = lazy(() => import("./ui/mix/CarouselPlugin"));
 
 // eslint-disable-next-line react/prop-types
 function Hero() {
@@ -71,13 +73,16 @@ function Hero() {
               >
                 <h1
                   id="title"
-                  className="md:text-2xl text-3xl lg:text-6xl  text-white stroke-green-600 rounded md:p-4 p-2"
+                  className="md:text-2xl text-3xl lg:text-6xl text-white stroke-green-600 rounded md:p-4 p-2"
                 >
                   {isLoggedIn
-                    ? "Bienvenue, " + user.fullName
-                    : "Facilitez vos échanges agricoles"}{" "}
+                    ? user.fullName
+                      ? `Bienvenue, ${user.fullName}`
+                      : "Bienvenue, ..."
+                    : "Facilitez vos échanges agricoles"}
                   <br />
                 </h1>
+
                 {!isLoggedIn && (
                   <span className="text-orange-600 md:text-2xl text-3xl lg:text-6xl font-extrabold rounded md:p-4 p-2">
                     avec simplicité 🌾
@@ -100,9 +105,6 @@ function Hero() {
                       Mon profile
                     </a>
                   </>
-
-
-
                 ) : (
                   <>
                     <a
@@ -117,7 +119,6 @@ function Hero() {
                   </>
                 )}
               </div>
-             
             </div>
           </div>
 
@@ -135,8 +136,9 @@ function Hero() {
             <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40"></div>
           </div> */}
           <div className="w-1/2 mt-10">
-          <CarouselPlugin className="hidden lg:block w-full lg:w-1/2 h-screen bg-cover bg-center "/>
-
+            <Suspense fallback={<Loading />}>
+              <CarouselPlugin className="hidden lg:block w-full lg:w-1/2 h-screen bg-cover bg-center " />
+            </Suspense>
           </div>
         </div>
       </header>

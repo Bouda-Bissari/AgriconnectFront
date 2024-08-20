@@ -42,20 +42,22 @@ export default function Login() {
       })
       .then((response) => {
         const { data } = response;
-        console.log("Success:", data);
         setToken(data.token);
         setUser(data.user);
         setRoles(data.roles);
-        console.log(data.roles);
-        console.log(data);       
-        navigate("/");
-        
+        navigate("/"); // Redirection seulement après succès
       })
       .catch((err) => {
         const response = err.response;
-        if (response && response.status === 422) {
-          console.log(response.data.errors);
+        if (response && response.status === 401) {
+          // Gestion des erreurs pour le statut 401 (mauvais numéro ou mot de passe)
+          setErrors({ message: response.data.message });
+        } else if (response && response.status === 422) {
+          // Gestion des erreurs de validation
           setErrors(response.data.errors);
+        } else {
+          // Gestion des autres types d'erreurs
+          setErrors({ message: "Une erreur est survenue, veuillez réessayer." });
         }
       });
   };
@@ -69,7 +71,7 @@ export default function Login() {
         >
           <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
             <div className="bg-black bg-opacity-40 rounded-xl p-5">
-              <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
+              <h2 className="text-2xl font-extrabold text-white sm:text-3xl" style={{ fontFamily: "poetsen" }}>
                 AgriConnect
               </h2>
               <p className="max-w-xl mt-3 text-gray-300 font-bold">
@@ -82,7 +84,7 @@ export default function Login() {
 
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
-            <div className="text-center">
+            <div className="text-center" style={{ fontFamily: "poetsen" }}>
               <p className="mt-3 text-gray-500 dark:text-gray-300 text-5xl font-bold">
                 Bienvenue, heureux de vous revoir !
               </p>
@@ -113,6 +115,7 @@ export default function Login() {
                     {errors.phone_number[0]}
                   </p>
                 )}
+                
               </div>
 
               <div className="mt-3">
@@ -129,6 +132,7 @@ export default function Login() {
                   >
                     Mot de passe oublié ?
                   </a>
+
                 </div>
                 <input
                   onChange={handleOnChange}
@@ -142,6 +146,11 @@ export default function Login() {
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.password[0]}
+                  </p>
+                )}
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.message}
                   </p>
                 )}
               </div>

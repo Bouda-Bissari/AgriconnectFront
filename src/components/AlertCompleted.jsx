@@ -6,14 +6,18 @@ import { UserContext } from "../contexts/ContextProvider.jsx";
 
 export function AlertCompleted() {
   const navigate = useNavigate();
-  const { user } = UserContext();
+  const { user} = UserContext();
+  const userCompleted = JSON.parse(localStorage.getItem("USER_COMPLETED"));
 
   // Gestion de la redirection vers le profil
   const handleRedirect = () => {
     navigate(`/profil/${user.id}`);
   };
 
-  if (!user.is_completed) {
+  console.log(user.is_completed)
+  console.log(userCompleted)
+
+  if (!userCompleted) {
     return (
       <Alert variant="destructive" className="w-4/5 mx-auto mb-10">
         <AlertCircle className="h-4 w-4" />

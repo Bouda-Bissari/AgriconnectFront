@@ -5,7 +5,6 @@ import Users from "./views/Users.jsx";
 import GuestLayout from "./layouts/GuestLayout.jsx";
 import Login from "./views/Login.jsx";
 import Otp from "./views/Otp.jsx";
-
 import Register from "./views/Register.jsx";
 import NotFound from "./views/NotFound.jsx";
 import Dashboard from "./views/Dashboard.jsx";
@@ -29,6 +28,9 @@ import UserServices from "./components/UserServices.jsx";
 import CreateService from "./components/CreateService.jsx";
 import DisplayCandidature from "./views/DisplayCandidature.jsx";
 import DisplayCandidatureEx from "./views/DisplayCandidatureEx.jsx";
+import ServicesWork from "./components/ServicesWork.jsx";
+import ServicesMaterial from "./components/ServicesMaterial.jsx";
+import ServiceApplications from "./views/ServiceApplications.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Navigate to="/acceuil" />,
+      },
+      {
+        path: "/acceuil",
+        element: <Acceuil />,
       },
       {
         path: "/users",
@@ -52,27 +58,17 @@ const router = createBrowserRouter([
         element: <UserForm key="userUpdate" />,
       },
       {
-        path: "/acceuil",
-        element: <Acceuil />,
-      },
-      {
-        path: "/detailservice/:jobId",
+        path: "/services/detailservice/:jobId",
         element: <DetailServices />,
       },
       {
-        path: "/detailprofil/:profilId",
+        path: "/ouvriers/detailprofil/:profilId",
         element: <DetailProfil />,
       },
-
       {
         path: "/dashboard",
         element: <Dashboard />,
       },
-      {
-        path: "/createservice",
-        element: <CreateService />,
-      },
-
       {
         path: "/info",
         element: <EnSavoirPlus />,
@@ -82,7 +78,15 @@ const router = createBrowserRouter([
         element: <Services />,
       },
       {
-        path: "/postulants",
+        path: "/services/work",
+        element: <ServicesWork />,
+      },
+      {
+        path: "/services/Material",
+        element: <ServicesMaterial />,
+      },
+      {
+        path: "/ouvriers",
         element: <UserProfile />,
       },
     ],
@@ -111,7 +115,6 @@ const router = createBrowserRouter([
         path: "/choix",
         element: <ChoicePage />,
       },
-
       {
         path: "/details",
         element: <DetailsForm />,
@@ -138,8 +141,33 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
+    path: "/profil",
+    element: <Profil />,
+    children: [
+      {
+        path: "/profil/:userId",
+        element: <ProfilDetails />,
+      },
+      {
+        path: "/profil/createservice",
+        element: <CreateService />,
+      },
+      {
+        path: "/profil/user/:userId/services",
+        element: <UserServices />,
+      },
+      {
+        path: "/profil/user/candidature",
+        element: <DisplayCandidature />,
+      },
+      {
+        path: "/profil/exploitant/candidature",
+        element: <DisplayCandidatureEx />,
+      },
+    ],
+  },
+    {
     path: "/",
     element: <Profil />,
     children: [
@@ -148,22 +176,27 @@ const router = createBrowserRouter([
         element: <ProfilDetails />,
       },
       {
-        path: "/user/:userId/services",
+        path: "/profil/createservice",
+        element: <CreateService />,
+      },
+      {
+        path: "/profil/user/:userId/services",
         element: <UserServices />,
       },
       {
-        path: "/user/candidature",
+        path: "/profil/user/candidature",
         element: <DisplayCandidature />,
       },
       {
-        path: "/exploitant/candidature",
+        path: "/profil/user/:jobId/candidatures",
+        element: <ServiceApplications />,
+      },
+      {
+        path: "/profil/exploitant/candidature",
         element: <DisplayCandidatureEx />,
       },
-
-       
     ],
   },
-
   {
     path: "*",
     element: <NotFound />,

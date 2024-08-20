@@ -9,7 +9,7 @@ const ProfilCard = ({
   email,
   date,
   gender,
-  avatar_url,
+  image,
   bio,
   company_name,
   address,
@@ -19,7 +19,7 @@ const ProfilCard = ({
     <div className="w-full bg-gray-900 rounded-lg shadow-lg p-2 flex flex-col justify-center items-center">
       <div className="mb-2">
         <img
-          src={avatar_url || images.person}
+          src={image || images.person}
           alt="User Avatar"
           className="object-center object-cover rounded-full h-36 w-36"
         />
@@ -33,7 +33,7 @@ const ProfilCard = ({
         </p>
       </div>
       {/* View Details Button */}
-      <Link to={`/detailprofil/${profilId}`}>
+      <Link to={`/ouvriers/detailprofil/${profilId}`}>
         <button className="w-full py-2 px-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-300 ease-in-out">
           Voir les détails
         </button>

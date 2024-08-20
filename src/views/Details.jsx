@@ -8,7 +8,7 @@ const DetailsForm = () => {
     first_name: "",
     date: "",
     gender: "",
-    avatar_url: "",
+    image: "",
     bio: "",
     address: "",
     domaine: "",
@@ -27,7 +27,6 @@ const DetailsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
     try {
       await axios.post("/details", formData);
@@ -208,7 +207,7 @@ const DetailsForm = () => {
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Domaine
-                  </label>     
+                  </label>
 
                   <select
                     name="domaine"
@@ -265,7 +264,7 @@ const DetailsForm = () => {
 
                 <div className="sm:col-span-2 h-full">
                   <label
-                    htmlFor="avatar_url"
+                    htmlFor="image"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     URL de l&apos;avatar
@@ -273,7 +272,7 @@ const DetailsForm = () => {
 
                   <div className="flex items-center justify-center w-full">
                     <label
-                      htmlFor="avatar_url"
+                      htmlFor="image"
                       className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -303,9 +302,9 @@ const DetailsForm = () => {
                       <input
                         type="file"
                         className="hidden"
-                        name="avatar_url"
-                        id="avatar_url"
-                        value={formData.avatar_url}
+                        name="image"
+                        id="image"
+                        value={formData.image}
                         onChange={handleChange}
                         placeholder="URL de votre avatar"
                       />

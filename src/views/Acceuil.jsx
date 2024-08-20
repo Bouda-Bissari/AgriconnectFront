@@ -1,11 +1,12 @@
 import Banner from "../components/Banner.jsx";
 import ForYou from "../components/ForYou.jsx";
 import Hero from "../components/Hero.jsx";
-import CarouselPlugin from '../components/ui/mix/CarouselPlugin.jsx'
 import ServicesWork from "../components/ServicesWork.jsx";
-import DisplayCandidature from "./DisplayCandidature.jsx";
-import SkeletonDetailCandidature from "@/components/SkeletonDetailCandidature .jsx";
-import { AlertDialogDemo } from "@/components/AlertDialogDemo.jsx";
+import ServicesMaterial from "@/components/ServicesMaterial.jsx";
+import ClickPas from "./ClickPas.jsx";
+import DisplayCandidatureEx from "./DisplayCandidatureEx.jsx";
+import CenteredServicesWork from "@/components/CenteredServicesWork.jsx";
+
 
 export function Acceuil() {
   // const handleScrollToSavoir = () => {
@@ -22,25 +23,20 @@ export function Acceuil() {
       <div>
         <Banner />
       </div>
-      <div>
+      {/* <div>
         <ServicesWork />
+      </div> */}
+      <div>
+        <CenteredServicesWork />
       </div>
       <div>
-        <AlertDialogDemo />
+        <ServicesMaterial />
       </div>
-      <div>
-        <SkeletonDetailCandidature />
-      </div>
-      
-      <div>
-        <DisplayCandidature />
-      </div>
-      
      
-<div className="m-20">
-<CarouselPlugin/>
-
-</div>
+     
+  
+      
+    
 
       <div>
         <ForYou />

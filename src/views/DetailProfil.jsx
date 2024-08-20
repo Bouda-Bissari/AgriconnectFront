@@ -28,7 +28,7 @@ const DetailProfil = () => {
 
   useEffect(() => {
     axios
-      .get(`profile/${profilId}`)
+      .get(`profil/${profilId}`)
       .then((response) => {
         const profileData = response.data;
         if (profileData.details && profileData.details.date) {
@@ -64,7 +64,7 @@ const DetailProfil = () => {
     email = null,
     age,
     gender,
-    avatar_url,
+    image,
     bio,
     company_name,
     address,
@@ -77,7 +77,7 @@ const DetailProfil = () => {
           <div className="py-6 md:py-0 md:px-6">
             <div className="flex flex-col items-center mb-4">
               <img
-                src={avatar_url || images.person}
+                src={image || images.person}
                 alt="User Avatar"
                 className="object-center object-cover rounded-full h-36 w-36 mb-4"
               />
@@ -218,7 +218,7 @@ const DetailProfil = () => {
           </div>
           <div className="pt-6 md:pt-0 md:px-6">
             <img
-              src={avatar_url || images.person}
+              src={image || images.person}
               alt="User Avatar"
               className="object-center object-cover rounded w-full h-full"
             />

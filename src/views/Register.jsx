@@ -3,11 +3,12 @@ import { useState } from "react";
 import axiosClient from "../configs/axiosClient.js";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import images from "../assets/index.jsx";
+
 const Register = () => {
   const { role } = useParams();
 
   const navigate = useNavigate();
-  const { setUser, setToken, setRole } = UserContext();
+  const { setUser, setToken, setRoles } = UserContext();
 
   const [form, setForm] = useState({
     phone_number: "",
@@ -28,7 +29,7 @@ const Register = () => {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const { password, password_confirmation, phone_number } = form;
@@ -37,6 +38,11 @@ const Register = () => {
     if (password !== password_confirmation) {
       validationErrors.passwordConfirm =
         "Les mots de passe ne correspondent pas.";
+    }
+
+    // Validation du numéro de téléphone
+    if (!/^\d{8,}$/.test(phone_number)) {
+      validationErrors.phone_number = "Le numéro de téléphone est invalide.";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -49,27 +55,30 @@ const Register = () => {
       ? phone_number
       : `228${phone_number}`;
 
-    // Envoyer les données au backend
-    axiosClient
-      .post("/register", {
+    try {
+      const response = await axiosClient.post("/register", {
         ...form,
         phone_number: formattedPhoneNumber,
         role: role,
-      })
-      .then((response) => {
-        const { data } = response;
-        console.log("Succès:", data);
-        setToken(data.token);
-        setUser(data.user);
-        setRole(data.role);
-        navigate("/otp");
-      })
-      .catch((err) => {
-        const response = err.response;
-        if (response && response.status === 422) {
-          setErrors(response.data.errors);
-        }
       });
+      const { data } = response;
+      console.log("Succès:", data);
+      setToken(data.token);
+      setUser(data.user);
+      setRoles(data.role);
+      console.log("Navigating to /otp");
+      navigate("/otp");
+    } catch (err) {
+      const response = err.response;
+      if (response && response.status === 422) {
+        setErrors(response.data.errors);
+        console.log(response.data.errors);
+      } else if (response && response.status === 400) {
+        setValidationErrors({
+          phone_number: response.data.error || "Une erreur est survenue.",
+        });
+      }
+    }
   };
 
   return (
@@ -81,7 +90,10 @@ const Register = () => {
         >
           <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
             <div className="bg-black bg-opacity-40 rounded-xl p-5">
-              <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
+              <h2
+                className="text-2xl font-extrabold text-white sm:text-3xl"
+                style={{ fontFamily: "poetsen" }}
+              >
                 AgriConnect
               </h2>
               <p className="max-w-xl mt-3 text-gray-300 font-bold">
@@ -94,7 +106,7 @@ const Register = () => {
 
         <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
           <div className="flex-1">
-            <div className="text-center">
+            <div className="text-center" style={{ fontFamily: "poetsen" }}>
               <p className="mt-3 text-gray-500 dark:text-gray-300 text-5xl font-bold">
                 Bienvenue, inscrivez-vous
               </p>
@@ -106,7 +118,7 @@ const Register = () => {
             <form onSubmit={onSubmit} className="mt-4">
               <div className="mb-3">
                 <label
-                  htmlFor="password"
+                  htmlFor="fullName"
                   className="block mb-2 text-sm text-gray-600 dark:text-gray-200"
                 >
                   Votre Nom Complet
@@ -116,11 +128,11 @@ const Register = () => {
                   name="fullName"
                   id="fullName"
                   type="text"
-                  placeholder="Votre nom complet"
+                  placeholder="KOFFI Eduard"
                   required
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
-                {errors.password && (
+                {errors.fullName && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.fullName[0]}
                   </p>
@@ -144,6 +156,11 @@ const Register = () => {
                   placeholder="Votre numéro de téléphone"
                   className="block w-3/4 px-4 py-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
+                {validationErrors.phone_number && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {validationErrors.phone_number}
+                  </p>
+                )}
                 {errors.phone_number && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.phone_number[0]}

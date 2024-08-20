@@ -1,12 +1,12 @@
+import { Link } from "react-router-dom";
 import axiosClient from "../configs/axiosClient";
 import { UserContext } from "../contexts/ContextProvider";
+import images from "../assets/index.jsx";
 
 const SideProfil = () => {
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
   const { setUser, setToken, roles } = UserContext();
-  // const role = localStorage.getItem("USER_ROLE");
-  console.log(roles);
-  console.log(userId);
+
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
@@ -15,58 +15,64 @@ const SideProfil = () => {
   };
 
   return (
-    <div className="hidden  py-4 md:w-1/3 lg:w-1/4 md:block bg-green-500">
-      <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
-        <h2 className="pl-3 mb-4 text-2xl font-semibold">Gérer Votre Profil</h2>
-        <a
-          href={`/profil/${userId}`}
-          className="flex items-center px-3 py-2.5 font-bold bg-white text-indigo-900 border rounded-full"
+    <div className="hidden w-full md:block h-screen bg-gray-100 dark:bg-gray-800">
+      <div className="sticky top-0 h-full p-4 text-sm border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-y-auto">
+        
+        <Link to="/" className="flex items-center justify-center mb-2 p-5 space-x-3 rtl:space-x-reverse bg-orange-200 rounded-lg hover:bg-orange-300">
+          <img src={images.logo} className="h-[4rem] w-[8rem]" alt="Logo" />
+        </Link>
+
+        <Link
+          to={`/profil/${userId}`}
+          className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
           Votre Profil
-        </a>
-        {roles.includes("demandeur") && (
-          <a
-            href={`/user/${userId}/services`}
-            className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+        </Link>
+
+        {roles.includes("exploitant") && (
+          <Link
+            to={`/profil/user/${userId}/services`}
+            className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
           >
-            Offres
-          </a>
+            Mes Publications
+          </Link>
         )}
-        <a
-          href="/user/candidature"
-          className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+
+        <Link
+          to="/profil/user/candidature"
+          className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
           Mes Candidatures
-        </a>
+        </Link>
 
-        
-        <a
-          href="/exploitant/candidature"
-          className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+        <Link
+          to="/profil/exploitant/candidature"
+          className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
-          Candidatures recues
-        </a>
-        <a
-          href="/login"
-          className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+          Candidatures Reçues
+        </Link>
+
+        <Link
+          to="/notifications"
+          className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
           Notifications
-        </a>
-        <a
-          href="/"
-          className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
+        </Link>
+
+        <Link
+          to="/"
+          className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
-          Page d&apos;acceuil
-        </a>
+          Page d&apos;Accueil
+        </Link>
+
         <button
           onClick={onLogout}
-          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-left"
+          className="w-full px-4 py-2 mt-4 text-sm font-semibold bg-red-500 rounded text-white hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white"
         >
-          Logout
+          Se Déconnecter
         </button>
-        
       </div>
-
     </div>
   );
 };

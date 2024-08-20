@@ -1,4 +1,3 @@
-// src/pages/UserProfile.jsx
 import { useState, useEffect } from "react";
 import axios from "../configs/axiosClient.js";
 import ProfilCard from "../components/ProfilCard";
@@ -9,27 +8,27 @@ import { UserContext } from "../contexts/ContextProvider.jsx";
 import { Navigate } from "react-router-dom";
 
 const categories = [
-  'Culture de céréales',
-  'Culture de légumes',
-  'Culture de fruits',
-  'Culture de tubercules',
-  'Élevage de bétail',
-  'Élevage de volailles',
-  'Aquaculture',
-  'Jardinage',
-  'Sarclage',
-  'Arboriculture',
-  'Horticulture',
-  'Viticulture',
-  'Culture de plantes médicinales',
-  'Cultures sous serre',
-  'Agroforesterie',
-  'Culture bio',
-  'Recrutement de travailleurs agricoles',
-  'Gestion des fermes',
-  'Consultation en agriculture',
-  'Vente de produits agricoles',
-  'Formation agricole',
+  "Culture de céréales",
+  "Culture de légumes",
+  "Culture de fruits",
+  "Culture de tubercules",
+  "Élevage de bétail",
+  "Élevage de volailles",
+  "Aquaculture",
+  "Jardinage",
+  "Sarclage",
+  "Arboriculture",
+  "Horticulture",
+  "Viticulture",
+  "Culture de plantes médicinales",
+  "Cultures sous serre",
+  "Agroforesterie",
+  "Culture bio",
+  "Recrutement de travailleurs agricoles",
+  "Gestion des fermes",
+  "Consultation en agriculture",
+  "Vente de produits agricoles",
+  "Formation agricole",
 ];
 
 const UserProfile = () => {
@@ -38,7 +37,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = UserContext();
-
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,8 +47,12 @@ const UserProfile = () => {
     const fetchProfiles = async () => {
       try {
         const response = await axios.get("/profile");
-        setProfiles(response.data);
-        setFilteredProfiles(response.data);
+        // Filtrer les profils pour le rôle "ouvrier"
+        const profilesWithRoleOuvrier = response.data.filter(profile => 
+          profile.roles.some(role => role.name === 'ouvrier') && profile.is_completed
+        );
+        setProfiles(profilesWithRoleOuvrier);
+        setFilteredProfiles(profilesWithRoleOuvrier);
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -61,14 +64,18 @@ const UserProfile = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = profiles.filter(profile => {
-      const matchesQuery = profile.fullName.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === "All categories" || (profile.details && profile.details.domaine === selectedCategory);
+    const filtered = profiles.filter((profile) => {
+      const matchesQuery = profile.fullName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All categories" ||
+        (profile.details && profile.details.domaine === selectedCategory);
       return matchesQuery && matchesCategory;
     });
 
     setFilteredProfiles(filtered);
-  }, [searchQuery, selectedCategory, profiles]); // Déclenche la recherche quand searchQuery, selectedCategory ou profiles changent
+  }, [searchQuery, selectedCategory, profiles]);
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -97,13 +104,15 @@ const UserProfile = () => {
     }
 
     if (error) return <p className="mt-40">Erreur: {error.message}</p>;
-
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
-    const currentProfiles = filteredProfiles.slice(firstPostIndex, lastPostIndex);
+    const currentProfiles = filteredProfiles.slice(
+      firstPostIndex,
+      lastPostIndex
+    );
 
     return (
-      <main className="bg-gray-200 flex flex-col items-center justify-center p-10">
+      <main className="bg-gray-200 md:mt-10 mt-5 flex flex-col items-center justify-center p-10">
         <div className="mb-6 w-3/4 flex flex-col md:flex-row items-center gap-2 mt-10 ">
           <input
             type="text"
@@ -138,7 +147,7 @@ const UserProfile = () => {
                 phone_number={profile.phone_number}
                 date={profile.details?.date || "Non disponible"}
                 gender={profile.details?.gender || "Non disponible"}
-                avatar_url={profile.details?.avatar_url || images.person}
+                image={profile.details?.image || images.person}
                 bio={profile.details?.bio || "Non disponible"}
                 company_name={profile.details?.company_name || "Non disponible"}
                 address={profile.details?.address || "Non disponible"}
@@ -148,12 +157,15 @@ const UserProfile = () => {
           )}
         </div>
 
+             {/* Only show Pagination if the total number of services is greater than postsPerPage */}
+      {filteredProfiles.length > postsPerPage && (
         <Pagination
           totalPosts={filteredProfiles.length}
           postsPerPage={postsPerPage}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
         />
+      )}
       </main>
     );
   }
