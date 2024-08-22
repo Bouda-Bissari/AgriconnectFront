@@ -1,6 +1,6 @@
 const Banner = () => {
   return (
-    <div>
+    <div className="md:mt-5">
       <div
         className="bg-cover bg-center h-auto text-white md:py-4 py-1 md:px-10 px-5 object-fill justify-center items-center"
         style={{ backgroundImage: "url('src/assets/Image13.jpg')" }}

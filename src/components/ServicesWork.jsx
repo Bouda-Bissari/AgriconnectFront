@@ -126,6 +126,7 @@ const ServicesWork = () => {
               jobId={service.id}
               price={service.price}
               imageUrl={service.image}
+              userId={service.user_id}
             />
           ))}
         </div>

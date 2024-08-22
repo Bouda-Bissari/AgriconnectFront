@@ -36,7 +36,7 @@ const CenteredServicesWork = () => {
 
   if (loading) {
     return (
-      <div className="my-20 w-full flex justify-center items-center flex-col">
+      <div className="md:my-5 w-full flex justify-center items-center flex-col">
         <h2
           className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
           style={{ fontFamily: "poetsen" }}
@@ -61,7 +61,7 @@ const CenteredServicesWork = () => {
   const currentPosts = workServices.slice(firstPostIndex, lastPostIndex);
 
   return (
-    <div className="my-20 w-full flex justify-center items-center flex-col">
+    <div className="my-5 w-full flex justify-center items-center flex-col">
       {isLoggedIn && <AlertCompleted />}
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"

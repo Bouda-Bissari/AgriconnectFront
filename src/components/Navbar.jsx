@@ -30,7 +30,7 @@ export default function Navbar() {
   const isActive = (path) => {
     return location.pathname.startsWith(path)
       ? "block py-2 px-3 text-white bg-orange-700 hover:bg-orange-800 focus:outline-none focus:ring-4 focus:ring-orange-300 font-medium rounded-lg md:bg-orange-500 md:text-white md:p-2 md:dark:text-white"
-      : "block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-2 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white";
+      : "block py-2 px-3 text-gray-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-orange-700 md:p-2 md:dark:hover:text-orange-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white";
   };
 
   const toggleMenu = () => {
@@ -150,7 +150,7 @@ export default function Navbar() {
           className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${isOpen ? "block" : "hidden"}`}
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-green-800 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 text-black dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <Link
                 to="/acceuil"

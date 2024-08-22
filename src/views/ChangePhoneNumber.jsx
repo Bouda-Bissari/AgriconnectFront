@@ -11,6 +11,8 @@ const ChangePhoneNumber = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
     if (user && user.phone_number) {
       setNewPhoneNumber(user.phone_number);
@@ -27,12 +29,11 @@ const ChangePhoneNumber = () => {
 
       console.log("Formatted phone number:", formattedPhoneNumber);
 
-      await Axios.post("/update-phone-number", {
+      const response = await Axios.post(`/update-phone-number/${user.id}`, {
         phone_number: formattedPhoneNumber,
       });
 
-      setMessage("Numéro de téléphone mis à jour avec succès.");
-      console.log("Phone number updated successfully");
+      setMessage(response.data.message);
 
       setUser((prevUser) => ({
         ...prevUser,

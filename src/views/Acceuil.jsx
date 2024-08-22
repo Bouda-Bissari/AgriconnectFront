@@ -6,6 +6,7 @@ import ServicesMaterial from "@/components/ServicesMaterial.jsx";
 import ClickPas from "./ClickPas.jsx";
 import DisplayCandidatureEx from "./DisplayCandidatureEx.jsx";
 import CenteredServicesWork from "@/components/CenteredServicesWork.jsx";
+import Header from "@/components/Head.jsx";
 
 
 export function Acceuil() {
@@ -15,8 +16,11 @@ export function Acceuil() {
   return (
     <div>
       <div>
-        <Hero />
+        <Header />
       </div>
+      {/* <div>
+        <Hero />
+      </div> */}
       {/* <div ref={savoirRef}>
         <Savoir />
       </div> */}

@@ -12,6 +12,7 @@ const Otp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigate = useNavigate();
 
+
   useEffect(() => {
     // Vérifiez le numéro de téléphone dans le contexte
     if (user?.phone_number) {

@@ -28,7 +28,10 @@ const JobCard = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const Id = JSON.parse(localStorage.getItem("USER_ID"));
+  console.log(Id)
+  console.log(userId)
 
+  
   useEffect(() => {
     const fetchApplicationsCount = async () => {
       try {
@@ -56,7 +59,7 @@ const JobCard = ({
               alt={title}
               className="w-full md:h-56 h-32 object-cover"
             />
-            {userId == Id && (
+            {(userId == Id && (Id!==null && userId!==undefined)) && (
               <Link
                 to={`/profil/user/${jobId}/candidatures`}
                 className="absolute top-2 right-2 cursor-pointer z-10 flex items-center p-2 bg-white rounded-full shadow-md hover:bg-gray-100 border border-gray-300 transition-all"

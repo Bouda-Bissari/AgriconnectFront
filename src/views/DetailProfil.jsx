@@ -4,6 +4,7 @@ import axios from "../configs/axiosClient.js";
 import images from "../assets/index.jsx";
 import SkeletonDetailService from "../components/SkeletonDetailService.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
+import imagePath from "../configs/imageUrl";
 
 const DetailProfil = () => {
   const { profilId } = useParams();
@@ -28,14 +29,15 @@ const DetailProfil = () => {
 
   useEffect(() => {
     axios
-      .get(`profil/${profilId}`)
+      .get(`profile/${profilId}`)
       .then((response) => {
-        const profileData = response.data;
-        if (profileData.details && profileData.details.date) {
-          profileData.details.age = calculateAge(profileData.details.date);
+        if (response.data.details && response.data.details.date) {
+          response.data.details.age = calculateAge(response.data.details.date);
         }
-        setProfilData(profileData);
+        setProfilData(response.data);
         setLoading(false);
+        // console.log(response.data.details);
+        // console.log(profilData.details.domaine);
       })
       .catch((error) => {
         setError(error.message);
@@ -43,6 +45,7 @@ const DetailProfil = () => {
       });
   }, [profilId]);
 
+  console.log(profilData);
   if (!token) {
     return <Navigate to={"/login"} />;
   }
@@ -59,7 +62,7 @@ const DetailProfil = () => {
     return <p>Pas de profil disponible</p>;
   }
 
-  const { fullName, phone_number, domaine } = profilData;
+  const { fullName, phone_number } = profilData;
   const {
     email = null,
     age,
@@ -67,6 +70,7 @@ const DetailProfil = () => {
     image,
     bio,
     company_name,
+    domaine,
     address,
   } = profilData.details || {};
 
@@ -76,11 +80,19 @@ const DetailProfil = () => {
         <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
           <div className="py-6 md:py-0 md:px-6">
             <div className="flex flex-col items-center mb-4">
-              <img
-                src={image || images.person}
-                alt="User Avatar"
-                className="object-center object-cover rounded-full h-36 w-36 mb-4"
-              />
+              {image ? (
+                <img
+                  src={`${imagePath}/${image}`}
+                  alt="Profile Image"
+                  className="object-center object-cover rounded-full h-36 w-36"
+                />
+              ) : (
+                <img
+                  className="object-center object-cover rounded-full h-36 w-36"
+                  src={images.person}
+                  alt="Avatar avec bordure"
+                />
+              )}
               <h1
                 className="text-4xl text-center"
                 style={{ fontFamily: "poetsen" }}
@@ -160,18 +172,51 @@ const DetailProfil = () => {
               {bio && (
                 <p className="flex items-center">
                   <svg
+                    viewBox="0 0 20 20"
+                    version="1.1"
                     xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-15"
+                    fill="#000000"
+                    className="w-5 h-5 mr-2 sm:mr-6"
                   >
-                    <path
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                    />
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <title>message_three_points [#1560]</title>{" "}
+                      <desc>Created with Sketch.</desc> <defs> </defs>{" "}
+                      <g
+                        id="Page-1"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        {" "}
+                        <g
+                          id="Dribbble-Light-Preview"
+                          transform="translate(-420.000000, -959.000000)"
+                          fill="#ffffff"
+                        >
+                          {" "}
+                          <g
+                            id="icons"
+                            transform="translate(56.000000, 160.000000)"
+                          >
+                            {" "}
+                            <path
+                              d="M380.872728,808.94 C380.872728,810.045 379.977728,810.94 378.872728,810.94 C377.767728,810.94 376.872728,810.045 376.872728,808.94 C376.872728,807.835 377.767728,806.94 378.872728,806.94 C379.977728,806.94 380.872728,807.835 380.872728,808.94 M375.872728,808.94 C375.872728,810.045 374.977728,810.94 373.872728,810.94 C372.767728,810.94 371.872728,810.045 371.872728,808.94 C371.872728,807.835 372.767728,806.94 373.872728,806.94 C374.977728,806.94 375.872728,807.835 375.872728,808.94 M370.872728,808.94 C370.872728,810.045 369.977728,810.94 368.872728,810.94 C367.767728,810.94 366.872728,810.045 366.872728,808.94 C366.872728,807.835 367.767728,806.94 368.872728,806.94 C369.977728,806.94 370.872728,807.835 370.872728,808.94 M381.441728,817 C381.441728,817 378.825728,816.257 377.018728,816.257 C375.544728,816.257 375.208728,816.518 373.957728,816.518 C369.877728,816.518 366.581728,813.508 366.075728,809.851 C365.403728,804.997 369.268728,800.999 373.957728,801 C377.900728,801 381.002728,803.703 381.732728,807.083 C382.000728,808.318 381.973728,809.544 381.654728,810.726 C381.274728,812.131 381.291728,813.711 381.703728,815.294 C381.914728,816.103 382.302728,817 381.441728,817 M383.917728,815.859 C383.917728,815.859 383.640728,814.794 383.639728,814.79 C383.336728,813.63 383.271728,812.405 383.584728,811.248 C383.970728,809.822 384.035728,808.268 383.687728,806.66 C382.767728,802.405 378.861728,799 373.957728,799 C367.999728,798.999 363.264728,804.127 364.094728,810.125 C364.736728,814.766 368.870728,818.518 373.957728,818.518 C375.426728,818.518 375.722728,818.257 377.019728,818.257 C378.583728,818.257 380.795728,818.919 380.795728,818.919 C382.683728,819.392 384.399728,817.71 383.917728,815.859"
+                              id="message_three_points-[#1560]"
+                            >
+                              {" "}
+                            </path>{" "}
+                          </g>{" "}
+                        </g>{" "}
+                      </g>{" "}
+                    </g>
                   </svg>
 
                   <span className="font-bold">{bio}</span>
@@ -217,11 +262,19 @@ const DetailProfil = () => {
             </div>
           </div>
           <div className="pt-6 md:pt-0 md:px-6">
-            <img
-              src={image || images.person}
-              alt="User Avatar"
-              className="object-center object-cover rounded w-full h-full"
-            />
+            {image ? (
+              <img
+                src={`${imagePath}/${image}`}
+                alt="Profile Image"
+                className="object-center object-cover rounded w-full h-full"
+              />
+            ) : (
+              <img
+                className="object-center object-cover rounded w-full h-full"
+                src={images.person}
+                alt="Avatar avec bordure"
+              />
+            )}
           </div>
         </div>
       </section>

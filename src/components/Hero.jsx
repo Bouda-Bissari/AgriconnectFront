@@ -65,7 +65,7 @@ function Hero() {
         />
 
         <div className="lg:flex items-center justify-center relative z-10 p-10 ">
-          <div className="flex items-center justify-center w-full lg:w-1/2 gap-5 px-6 py-8 lg:min-h-[32rem]">
+          <div className="flex items-center justify-center w-full lg:w-3/5 gap-5 px-6 py-8 lg:min-h-[32rem]">
             <div className="max-w-xl ">
               <div
                 className="bg-black bg-opacity-35 bc rounded md:mt-0 mt-20"

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import images from "../assets/index.jsx";
+import imagePath from "../configs/imageUrl";
 
 const ProfilCard = ({
   phone_number,
@@ -18,11 +19,19 @@ const ProfilCard = ({
   return (
     <div className="w-full bg-gray-900 rounded-lg shadow-lg p-2 flex flex-col justify-center items-center">
       <div className="mb-2">
-        <img
-          src={image || images.person}
-          alt="User Avatar"
-          className="object-center object-cover rounded-full h-36 w-36"
-        />
+        {image ? (
+          <img
+            src={`${imagePath}/${image}`}
+            alt="Profile Image"
+            className="object-center object-cover rounded-full h-36 w-36"
+          />
+        ) : (
+          <img
+            className="object-center object-cover rounded-full h-36 w-36"
+            src={images.person}
+            alt="Avatar avec bordure"
+          />
+        )}
       </div>
       <div className="text-center mb-4">
         <p className="text-xl text-white font-bold mb-2">

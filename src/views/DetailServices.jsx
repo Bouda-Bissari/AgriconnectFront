@@ -82,8 +82,15 @@ const DetailServices = () => {
   return (
     <div className="my-40">
       <section className="container mx-auto w-4/5 rounded-sm py-6 bg-green-900 text-white dark:bg-orange-900 dark:text-white">
-        <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x">
-          <div className="py-6 md:py-0 md:px-6">
+
+      
+        <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x ">
+
+          <div className="py-6 md:py-0 md:px-6 relative">
+          <div className="">
+            <ReportAbuseDialog service_id={jobId} className="mt-5" />
+
+            </div>
             <h1
               className="text-4xl text-center"
               style={{ fontFamily: "poetsen" }}
@@ -172,10 +179,7 @@ const DetailServices = () => {
 
 
             {/* Ajouter le composant DialogSignalerAbus ici */}
-            <div className="mt-6">
-            <ReportAbuseDialog service_id={jobId} className="mt-5" />
 
-            </div>
               </form>
 
             ) : (
