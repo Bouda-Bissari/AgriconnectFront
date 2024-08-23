@@ -29,6 +29,7 @@ const StatusBadge = ({ status }) => {
     rejected: "bg-red-500 text-white",
     canceled: "bg-yellow-500 text-black",
     pending: "bg-gray-500 text-white",
+    deleted: "bg-gray-600 text-white",
   };
 
   return (
@@ -79,6 +80,20 @@ const DetailCandidature = ({
     }
   };
 
+
+  const deleteCandidature = async () => {
+    try {
+      const response = await axiosClient.put(`/candidatures/${id}/status`, {
+        status: "deleted",
+      });
+      alert(response.data.message);
+      // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la candidature:", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    }
+  };
+
   const renderButton = () => {
     switch (status) {
       case "accepted":
@@ -102,7 +117,9 @@ const DetailCandidature = ({
       case "canceled":
         return (
           <button
-            disabled
+            
+            onClick={cancelCandidature}
+
             className="bg-yellow-600 text-white py-2 px-4 rounded w-full"
           >
             Annulée
@@ -111,16 +128,26 @@ const DetailCandidature = ({
       case "pending":
         return (
           <button
-            onClick={cancelCandidature}
+          disabled
+            // onClick={cancelCandidature}
             className="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded w-full"
           >
             En attente
           </button>
         );
-      default:
-        return null;
-    }
-  };
+        case "deleted":
+          return (
+            <button
+            onClick={deleteCandidature}
+              className="bg-gray-600 text-white py-2 px-4 rounded w-full"
+            >
+              Supprimée
+            </button>
+          );
+        default:
+          return null;
+      }
+    };
 
   return (
     <section className="container w-4/5 mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
@@ -185,7 +212,7 @@ const DetailCandidature = ({
                 {status && (
                   <div className="flex justify-center items-center gap-3 ">
                     {renderButton()}
-                    <button className="bg-orange-500 rounded p-2 flex justify-center items-center">
+                    <button onClick={deleteCandidature} className="bg-orange-500 rounded p-2 flex justify-center items-center">
                       <svg
                         fill="#ffffff"
                         viewBox="0 0 24 24"
@@ -389,6 +416,58 @@ const DetailCandidature = ({
               </button> */}
               </div>
             )}
+
+{status == "canceled"  && (
+              <div className="flex gap-4 mt-6">
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold flex justify-center items-center gap-1 py-1 rounded w-full"
+                  onClick={deleteCandidature}
+                >
+                  <svg
+                    width="204px"
+                    height="204px"
+                    viewBox="0 -0.5 17 17"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="#ffffff"
+                    stroke="#ffffff"
+                    className="size-6"
+                  >
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <title>799</title> <defs> </defs>{" "}
+                      <g
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        {" "}
+                        <path
+                          d="M9.016,0.06 C4.616,0.06 1.047,3.629 1.047,8.029 C1.047,12.429 4.615,15.998 9.016,15.998 C13.418,15.998 16.985,12.429 16.985,8.029 C16.985,3.629 13.418,0.06 9.016,0.06 L9.016,0.06 Z M3.049,8.028 C3.049,4.739 5.726,2.062 9.016,2.062 C10.37,2.062 11.616,2.52 12.618,3.283 L4.271,11.631 C3.508,10.629 3.049,9.381 3.049,8.028 L3.049,8.028 Z M9.016,13.994 C7.731,13.994 6.544,13.583 5.569,12.889 L13.878,4.58 C14.571,5.555 14.982,6.743 14.982,8.028 C14.981,11.317 12.306,13.994 9.016,13.994 L9.016,13.994 Z"
+                          fill="#ffffff"
+                          className="si-glyph-fill"
+                        >
+                          {" "}
+                        </path>{" "}
+                      </g>{" "}
+                    </g>
+                  </svg>
+                  Supprimer
+                </button>
+                {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Modifier
+              </button> */}
+              </div>
+            )}
+
+
           </div>
         </div>
 

@@ -3,15 +3,17 @@ import JobCard from "./JobCard";
 import SkeletonJobCard from "./Skeleton";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import search from "../assets/search.png";
 import Loading from "./Loading";
+
 const UserServices = () => {
-  const { userId } = useParams();
+  const { userId1 } = useParams();
+  const userId = JSON.parse(localStorage.getItem("USER_ID"));
+
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(3);
 
@@ -31,34 +33,29 @@ const UserServices = () => {
   }, [userId]);
 
   if (loading) {
-    // Chargement du skeleton
     return (
-      <div className="my-20 w-full flex justify-center items-center flex-col">
+      <div className="flex flex-col items-center justify-center my-20 w-full">
         <h2
           className="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2"
           style={{ fontFamily: "poetsen" }}
         >
           Vos publications
         </h2>
-        <div className="">
-          {/* {Array.from({ length: postsPerPage }).map((_, index) => (
-            <SkeletonJobCard key={index} />
-          ))} */}
-          <Loading />
-        </div>
+        <Loading />
       </div>
     );
   }
 
-  if (error)
+  if (error) {
     return <p className="mt-20 text-red-600">Erreur : {error.message}</p>;
+  }
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = services.slice(firstPostIndex, lastPostIndex);
 
   return (
-    <div className="my-20 p-1 w-full flex justify-center items-center flex-col  ">
+    <div className="flex flex-col items-center justify-center my-20 p-4 w-full">
       <h2
         className="md:text-3xl text-xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2"
         style={{ fontFamily: "poetsen" }}
@@ -66,12 +63,12 @@ const UserServices = () => {
         Vos Publications de Besoins de Main d&apos;Œuvre
       </h2>
       <div className="flex justify-center my-6">
-        <a
-          href="/profil/createservice"
+        <Link
+          to="/profil/createservice"
           className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-500 transition duration-300"
         >
           Publier un Besoin
-        </a>
+        </Link>
       </div>
 
       {services.length === 0 ? (
@@ -99,7 +96,6 @@ const UserServices = () => {
               price={service.price}
               imageUrl={service.image}
               userId={service.user_id}
-
             />
           ))}
         </div>

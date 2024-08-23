@@ -4,7 +4,7 @@ const StateContext = createContext({
   user: null,
   roles: [], 
   token: null,
-  isCompleted: false, // Ajout de isCompleted dans le contexte
+  isCompleted: null, 
   setUser: () => {},
   setRoles: () => {}, 
   setToken: () => {},
@@ -22,21 +22,16 @@ export const ContextProvider = ({ children }) => {
 
   const setUser = (user) => {
     _setUser(user);
-
+  
+    // Stockage de l'ID de l'utilisateur
     if (user && user.id) {
       localStorage.setItem("USER_ID", JSON.stringify(user.id));
     } else {
       localStorage.removeItem("USER_ID");
     }
-    if (user && user.is_completed) {
-      localStorage.setItem("USER_COMPLETED", JSON.stringify(user.is_completed));
-      _setIsCompleted(user.is_completed); // Mettre à jour isCompleted
-    } else {
-      localStorage.removeItem("USER_COMPLETED");
-      _setIsCompleted(false); // Réinitialiser isCompleted
-    }
+  
   };
-
+  
   const setRoles = (roles) => {
     _setRoles(roles);
 

@@ -1,4 +1,3 @@
-import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import images from "../../../assets/index"; // Assurez-vous que le chemin est correct
 
@@ -8,21 +7,22 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useRef } from "react";
 
 export default function CarouselPlugin() {
-  const plugin = React.useRef(
+  const plugin = useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
   // Définissez un tableau d'images spécifiques
   const specificImages = [
     images.Image12,
-    images.Image2,
-    images.Image3,
-    images.Image11,
-    images.Image22,
-    images.Image20,
-    images.Image7,
+    images.back1,
+    images.back2,
+    images.back7,
+    images.back3,
+    images.back4,
+    images.back5,
   ];
 
   return (
@@ -32,7 +32,9 @@ export default function CarouselPlugin() {
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
-      <CarouselContent className="h-96"> {/* Ajustez la hauteur du carousel ici */}
+      <CarouselContent className="h-96">
+        {" "}
+        {/* Ajustez la hauteur du carousel ici */}
         {specificImages.map((image, index) => (
           <CarouselItem key={index} className="border-none">
             <div className="p-1 h-full">
@@ -41,7 +43,7 @@ export default function CarouselPlugin() {
                   <img
                     src={image}
                     alt={`Image ${index + 1}`}
-                    className="object-cover h-full w-full rounded-xl" // Utilisez h-full pour que l'image prenne toute la hauteur
+                    className="object-cover h-full w-full rounded-xl" 
                   />
                 </CardContent>
               </Card>

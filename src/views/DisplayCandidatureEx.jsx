@@ -16,23 +16,48 @@ const DisplayCandidatureEx = () => {
 
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
 
+  // useEffect(() => {
+  //   const fetchCandidatures = async () => {
+  //     try {
+  //       const response = await axiosClient.get(
+  //         `/candidatures/service-owner/${userId}`
+  //       );
+  //       setCandidatures(response.data);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       setError(err);
+  //       setLoading(false);
+  //       setStatusUpdated(false);
+  //     }
+  //   };
+
+  //   fetchCandidatures();
+  // }, [userId]);
+
   useEffect(() => {
     const fetchCandidatures = async () => {
       try {
-        const response = await axiosClient.get(
-          `/candidatures/service-owner/${userId}`
+        const response = await axiosClient.get( `/candidatures/service-owner/${userId}`);
+        // Filtrer les candidatures dont le statut n'est pas 'deleted'
+        const filteredCandidatures = response.data.filter(
+          (candidature) => candidature.status !== 'deleted'
         );
-        setCandidatures(response.data);
+        setCandidatures(filteredCandidatures);
         setLoading(false);
       } catch (err) {
         setError(err);
         setLoading(false);
         setStatusUpdated(false);
+
       }
     };
-
+  
     fetchCandidatures();
   }, [userId]);
+  
+
+
+
 
   if (loading) {
     return (

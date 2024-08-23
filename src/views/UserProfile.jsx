@@ -6,6 +6,7 @@ import SkeletonProfileCard from "../components/SkeletonProfileCard.jsx";
 import images from "../assets/index.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import { Navigate } from "react-router-dom";
+import Loading from "@/components/Loading.jsx";
 
 const categories = [
   "Culture de céréales",
@@ -88,20 +89,7 @@ const UserProfile = () => {
   if (!token) {
     return <Navigate to={"/login"} />;
   } else {
-    if (loading) {
-      return (
-        <div className="w-full bg-gray-800">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2">
-            Chargement des profils...
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 w-3/4 mx-auto m-20">
-            {Array.from({ length: postsPerPage }).map((_, index) => (
-              <SkeletonProfileCard key={index} />
-            ))}
-          </div>
-        </div>
-      );
-    }
+   
 
     if (error) return <p className="mt-40">Erreur: {error.message}</p>;
     const lastPostIndex = currentPage * postsPerPage;
@@ -113,27 +101,32 @@ const UserProfile = () => {
 
     return (
       <main className="bg-gray-200 md:mt-10 mt-5 flex flex-col items-center justify-center p-10">
-        <div className="mb-6 w-3/4 flex flex-col md:flex-row items-center gap-2 mt-10 ">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleInputChange}
-            placeholder="Rechercher par nom..."
-            className="border p-2 w-1/2 "
-          />
-          <select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-            className="p-2 border border-gray-300 rounded w-full md:w-1/4"
-          >
-            <option value="All categories">Toutes les catégories</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
+ <div className="mb-6 w-full max-w-screen-md mx-auto flex flex-col md:flex-row items-center gap-4">
+  <div className="relative w-full md:w-1/2">
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={handleInputChange}
+      placeholder="Rechercher par nom..."
+      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <div className="relative w-full md:w-1/4">
+    <select
+      value={selectedCategory}
+      onChange={handleCategoryChange}
+      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    >
+      <option value="All categories">Toutes les catégories</option>
+      {categories.map((category, index) => (
+        <option key={index} value={category}>
+          {category}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 w-3/4 mx-auto m-20">
           {currentProfiles.length === 0 ? (
             <p>Aucun profil trouvé</p>

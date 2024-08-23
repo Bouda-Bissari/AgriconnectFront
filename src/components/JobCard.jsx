@@ -28,10 +28,9 @@ const JobCard = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const Id = JSON.parse(localStorage.getItem("USER_ID"));
-  console.log(Id)
-  console.log(userId)
+  console.log(Id);
+  console.log(userId);
 
-  
   useEffect(() => {
     const fetchApplicationsCount = async () => {
       try {
@@ -59,7 +58,7 @@ const JobCard = ({
               alt={title}
               className="w-full md:h-56 h-32 object-cover"
             />
-            {(userId == Id && (Id!==null && userId!==undefined)) && (
+            {userId == Id && Id !== null && userId !== undefined && (
               <Link
                 to={`/profil/user/${jobId}/candidatures`}
                 className="absolute top-2 right-2 cursor-pointer z-10 flex items-center p-2 bg-white rounded-full shadow-md hover:bg-gray-100 border border-gray-300 transition-all"
@@ -177,13 +176,19 @@ const JobCard = ({
             Prix : {formatPrice(price)}
           </p>
         </div>
-
-        {/* View Details Button */}
-        <Link to={`/services/detailservice/${jobId}`}>
-          <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
-            Voir les détails
-          </button>
-        </Link>
+        {userId === Id && Id !== null && userId !== undefined ? (
+          <Link to={`/profil/servicedetail/${jobId}/${Id}`}>
+            <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
+              Voir les détails
+            </button>
+          </Link>
+        ) : (
+          <Link to={`/services/detailservice/${jobId}`}>
+            <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
+              Voir les détails
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );

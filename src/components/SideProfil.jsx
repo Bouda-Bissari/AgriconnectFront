@@ -53,7 +53,7 @@ const SideProfil = () => {
         </Link>
 
         <Link
-          to="/notifications"
+          to="/profil/notifications"
           className="block px-4 py-2 mb-2 font-semibold text-gray-900 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
         >
           Notifications

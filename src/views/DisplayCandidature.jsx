@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import DetailCandidature from "./DetailCandidature";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "../components/Pagination";
-import SkeletonDetailCandidature from "../components/SkeletonDetailCandidature ";
 import Loading from "@/components/Loading";
 // import { UserContext } from "@/contexts/ContextProvider";
 
@@ -14,20 +13,41 @@ const DisplayCandidature = () => {
   const [postsPerPage] = useState(4);
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
 
+  // useEffect(() => {
+  //   const fetchCandidatures = async () => {
+  //     try {
+  //       const response = await axiosClient.get(`/candidatures/user/${userId}`);
+  //       setCandidatures(response.data);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       setError(err);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchCandidatures();
+  // }, [userId]);
+
+
   useEffect(() => {
     const fetchCandidatures = async () => {
       try {
-        const response = await axiosClient.get(`/candidatures/service/${userId}`);
-        setCandidatures(response.data);
+        const response = await axiosClient.get(`/candidatures/user/${userId}`);
+        // Filtrer les candidatures dont le statut n'est pas 'deleted'
+        const filteredCandidatures = response.data.filter(
+          (candidature) => candidature.status !== 'deleted'
+        );
+        setCandidatures(filteredCandidatures);
         setLoading(false);
       } catch (err) {
         setError(err);
         setLoading(false);
       }
     };
-
+  
     fetchCandidatures();
   }, [userId]);
+  
 
   if (loading) {
     return (
@@ -76,7 +96,7 @@ const DisplayCandidature = () => {
       >
         Candidatures
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-1 md:gap-10 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-1 md:gap-10 gap-2 w-4/5">
         {currentPosts.map((candidature) => (
           <DetailCandidature
             key={candidature.id}

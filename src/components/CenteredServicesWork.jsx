@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
-import SkeletonJobCard from "./Skeleton"; // Import the Skeleton component
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
 import { AlertCompleted } from "./AlertCompleted";
@@ -82,18 +81,9 @@ const CenteredServicesWork = () => {
         </div>
       ) : (
         <div
-          className={`flex flex-wrap justify-around gap-4 ${
-            currentPosts.length === 1
-              ? "w-1/5"
-              : currentPosts.length === 2
-              ? "w-2/8"
-              : currentPosts.length === 3
-              ? "w-3/5"
-              : currentPosts.length === 4
-              ? "w-4/5"
-              : "w-full"
-          }`}
-        >
+          className="grid place-items-center" >
+                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}
@@ -106,6 +96,8 @@ const CenteredServicesWork = () => {
               imageUrl={service.image}
             />
           ))}
+              </div>
+
         </div>
       )}
       {workServices.length > postsPerPage && (

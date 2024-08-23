@@ -5,7 +5,7 @@ import { UserContext } from "@/contexts/ContextProvider";
 import { Toaster } from "@/components/ui/toaster";
 
 const Profil = () => {
-  const { user, token } = UserContext();
+  const { token } = UserContext();
 
   if (!token) {
     return <Navigate to={"/login"} />;

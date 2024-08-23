@@ -31,6 +31,9 @@ import DisplayCandidatureEx from "./views/DisplayCandidatureEx.jsx";
 import ServicesWork from "./components/ServicesWork.jsx";
 import ServicesMaterial from "./components/ServicesMaterial.jsx";
 import ServiceApplications from "./views/ServiceApplications.jsx";
+import DetailServicesEx from "./components/DetailServicesEx.jsx";
+import UpdateService from "./components/UpdateService.jsx";
+import Notifications from "./views/Notifications.jsx";
 
 const router = createBrowserRouter([
   {
@@ -176,8 +179,20 @@ const router = createBrowserRouter([
         element: <ProfilDetails />,
       },
       {
+        path: "/profil/notifications",
+        element: <Notifications />,
+      },
+      {
         path: "/profil/createservice",
         element: <CreateService />,
+      },
+      {
+        path: "/profil/updateservice/:jobId",
+        element: <UpdateService />,
+      },
+      {
+        path: "/profil/servicedetail/:jobId/:Id",
+        element: <DetailServicesEx />,
       },
       {
         path: "/profil/user/:userId/services",

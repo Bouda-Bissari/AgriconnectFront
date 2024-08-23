@@ -176,7 +176,7 @@ const Otp = () => {
                 <input
                   key={index}
                   type="text"
-                  className="w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                  className="w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
                   pattern="\d*"
                   maxLength="1"
                   ref={(el) => (inputsRef.current[index] = el)}
@@ -190,7 +190,7 @@ const Otp = () => {
           <div className="max-w-[260px] mx-auto mt-4">
             <button
               type="submit"
-              className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 transition-colors duration-150"
+              className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-orange-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-orange-950/10 hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-orange-300 transition-colors duration-150"
             >
               Vérifier le compte
             </button>
@@ -203,7 +203,7 @@ const Otp = () => {
           Vous n&apos;avez pas reçu de code ?{" "}
           <button
             onClick={resendOtp}
-            className="font-medium text-indigo-500 hover:text-indigo-600"
+            className="font-medium text-orange-500 hover:text-orange-600"
           >
             Renvoyer
           </button>
@@ -212,7 +212,7 @@ const Otp = () => {
           Vous voulez changer votre numéro de téléphone ?{" "}
           <Link
             to={"/change-phone"}
-            className="font-medium text-indigo-500 hover:text-indigo-600"
+            className="font-medium text-orange-500 hover:text-orange-600"
           >
             Changer
           </Link>

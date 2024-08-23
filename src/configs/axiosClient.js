@@ -2,7 +2,10 @@ import axios from 'axios';
 
 // Crée une instance d'axios avec une URL de base
 const axiosClient = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    // baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'http://192.168.3.32:8000/api',
+
+    
 });
 
 // Intercepteur de requête pour ajouter le token d'accès aux en-têtes de chaque requête

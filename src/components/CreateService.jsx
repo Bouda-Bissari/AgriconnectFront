@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "../configs/axiosClient";
 import { useNavigate } from "react-router-dom";
-
+import { useToast } from "@/components/ui/use-toast"
 const CreateService = () => {
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
+  const { toast } = useToast()
 
   const [serviceData, setServiceData] = useState({
     title: "",
@@ -48,6 +49,23 @@ const CreateService = () => {
 
       // Afficher une alerte de succès
       setAlert({ type: "success", message: "Service créé avec succès !" });
+      toast({
+        position: "top-right",
+        className:"text-2xl",
+        title: "Action réussie",
+        description: "Offre Creer avec success.",
+        status: "success",
+        isClosable: true,
+        icon: '✔️', 
+        style: {
+          backgroundColor: '#4caf50', // Couleur de fond
+          color: '#fff',
+          fontFamily:'poesten'
+        },
+        
+        transition: 'Bounce',
+        
+      });
       console.log(response.data)
 
       // Rediriger l'utilisateur
@@ -141,7 +159,6 @@ const CreateService = () => {
                 value={serviceData.deadline}
                 onChange={handleChange}
                 className="block w-full p-3 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-orange-500 focus:border-orange-500"
-                required
               />
             </div>
             <div>
@@ -169,7 +186,6 @@ const CreateService = () => {
                 onChange={handleChange}
                 className="block w-full p-3 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="Prix du service"
-                required
               />
             </div>
             <div className="md:col-span-2">

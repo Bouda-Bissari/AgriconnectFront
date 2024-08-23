@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
-import SkeletonJobCard from "./Skeleton";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
 import search from "../assets/searching.png";
@@ -111,7 +110,9 @@ const ServicesMaterial = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 w-3/4">
+        <div
+          className="grid place-items-center" >
+                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}
@@ -124,6 +125,7 @@ const ServicesMaterial = () => {
               imageUrl={service.image}
             />
           ))}
+          </div>
         </div>
       )}
       {/* Only show Pagination if the total number of services is greater than postsPerPage */}

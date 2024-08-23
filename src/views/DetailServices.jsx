@@ -8,6 +8,7 @@ import imagePath from "../configs/imageUrl.js";
 import { PostulerDialog } from "@/components/PostulerDialog.jsx";
 import { AlertCompleted } from "@/components/AlertCompleted.jsx";
 import { ReportAbuseDialog} from "@/components/ReportAbuseDialog.jsx"; // Importer le composant
+import { Button } from "@/components/ui/button.jsx";
 
 // Fonction pour formater les prix en FCFA sans décimales
 const formatPrice = (price) => {
@@ -76,9 +77,26 @@ const DetailServices = () => {
 
   // Destructurer les données pour un accès plus facile
   const { title, description, location, image, price } = serviceData.service;
-  const { phone_number } = serviceData.service.user || {};
+  const { phone_number,id } = serviceData.service.user || {};
   const { email } = serviceData.profiles || {};
 
+
+  const handleDeleteService = () => {
+    axios
+      .patch(`/service/${jobId}/update-deleted-status`, {
+        deleted: true,
+      })
+      // eslint-disable-next-line no-unused-vars
+      .then((_) => {
+        alert('Service supprimé avec succès');
+        // Redirection ou autre action après la suppression
+        navigate(`/profil/user/${user.id}/services`);
+      })
+      .catch((error) => {
+        alert('Erreur lors de la suppression du service: ' + error.message);
+      });
+  };
+  
   return (
     <div className="my-40">
       <section className="container mx-auto w-4/5 rounded-sm py-6 bg-green-900 text-white dark:bg-orange-900 dark:text-white">
@@ -188,7 +206,17 @@ const DetailServices = () => {
               </div>
             )}
 
-            
+            {id==user.id && (
+              <Button
+              onClick={handleDeleteService}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Supprimer
+            </Button>
+            )}
+
+
+
           </div>
 
           <div className="w-full h-full md:mt-2">

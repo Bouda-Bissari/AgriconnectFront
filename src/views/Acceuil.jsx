@@ -7,6 +7,7 @@ import ClickPas from "./ClickPas.jsx";
 import DisplayCandidatureEx from "./DisplayCandidatureEx.jsx";
 import CenteredServicesWork from "@/components/CenteredServicesWork.jsx";
 import Header from "@/components/Head.jsx";
+import CenteredServicesMaterial from "@/components/CenteredServicesMaterial.jsx";
 
 
 export function Acceuil() {
@@ -34,7 +35,7 @@ export function Acceuil() {
         <CenteredServicesWork />
       </div>
       <div>
-        <ServicesMaterial />
+        <CenteredServicesMaterial />
       </div>
      
      

@@ -8,7 +8,7 @@ const Register = () => {
   const { role } = useParams();
 
   const navigate = useNavigate();
-  const { setUser, setToken, setRoles } = UserContext();
+  const { setUser, setToken, setRoles,setIsCompleted } = UserContext();
 
   const [form, setForm] = useState({
     phone_number: "",
@@ -66,6 +66,7 @@ const Register = () => {
       setToken(data.token);
       setUser(data.user);
       setRoles(data.role);
+      setIsCompleted(data.is_completed)
       console.log("Navigating to /otp");
       navigate("/otp");
     } catch (err) {

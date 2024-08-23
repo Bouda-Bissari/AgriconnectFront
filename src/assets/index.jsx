@@ -35,6 +35,13 @@ import Hero8 from "./Hero8.jpeg";
 import Hero9 from "./Hero9.jpeg";
 import Hero10 from "./Hero10.jpeg";
 import hero from "./hero.jpg";
+import back1 from './Back1.jpg'
+import back2 from './Back2.jpg'
+import back3 from './Back3.jpg'
+import back4 from './Back4.jpg'
+import back5 from './Back5.jpg'
+import back6 from './Back6.jpg'
+import back7 from './Back7.jpg'
 
 // import canceled  './canceled.png';
 const images = {
@@ -65,6 +72,15 @@ const images = {
   logo,
   canceled,
   hero,
+  back1,
+  back2,
+  back3,
+  back4,
+  back5,
+  back6,
+  back7,
+  
+
 
   Hero1,
   Hero2,

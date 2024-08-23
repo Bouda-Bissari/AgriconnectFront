@@ -6,7 +6,7 @@ import images from "../assets/index.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, setToken, setRoles } = UserContext();
+  const { setUser, setToken, setRoles, setIsCompleted } = UserContext();
   const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
@@ -41,11 +41,18 @@ export default function Login() {
         phone_number: formattedPhoneNumber,
       })
       .then((response) => {
-        const { data } = response;
-        setToken(data.token);
-        setUser(data.user);
-        setRoles(data.roles);
-        navigate("/"); // Redirection seulement après succès
+        const { user, roles, is_completed, token } = response.data;
+        
+        setUser(user);
+        setRoles(roles);
+        setIsCompleted(is_completed); // Mettre à jour isCompleted
+        
+        if (is_completed) {
+          setToken(token);
+          navigate("/");
+        } else {
+          navigate("/otp");
+        }
       })
       .catch((err) => {
         const response = err.response;
