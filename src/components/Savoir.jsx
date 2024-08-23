@@ -63,7 +63,7 @@ function Savoir() {
               </ul>
             </div>
           </div>
-          <div className=" rounded-xl hidden md:block pl-16 relative flex items-end flex-col before:block before:absolute before:h-1/6 before:w-4 before:bg-green-500 before:bottom-0 before:left-0 before:rounded-lg before:transition-all group-hover:before:bg-orange-300 overflow-hidden im">
+          <div className=" rounded-xl  md:block pl-16 relative flex items-end flex-col before:block before:absolute before:h-1/6 before:w-4 before:bg-green-500 before:bottom-0 before:left-0 before:rounded-lg before:transition-all group-hover:before:bg-orange-300 overflow-hidden im">
             <div className=" absolute top-0 left-0 bg-green-500 w-4/6 h-full px-12 py-14 flex flex-col justify-center rounded-xl group-hover:bg-green-600 transition-all">
               <span
                 className="block mb-10 font-bold group-hover:text-orange-300"

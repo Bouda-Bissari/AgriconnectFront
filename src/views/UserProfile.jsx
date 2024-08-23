@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "../configs/axiosClient.js";
 import ProfilCard from "../components/ProfilCard";
 import Pagination from "../components/Pagination";
-import SkeletonProfileCard from "../components/SkeletonProfileCard.jsx";
 import images from "../assets/index.jsx";
 import { UserContext } from "../contexts/ContextProvider.jsx";
 import { Navigate } from "react-router-dom";
-import Loading from "@/components/Loading.jsx";
 
 const categories = [
   "Culture de céréales",
@@ -35,7 +33,7 @@ const categories = [
 const UserProfile = () => {
   const [profiles, setProfiles] = useState([]);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [ setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = UserContext();
   
