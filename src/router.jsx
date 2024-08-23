@@ -36,17 +36,16 @@ import UpdateService from "./components/UpdateService.jsx";
 import Notifications from "./views/Notifications.jsx";
 
 const router = createBrowserRouter([
-
   {
     path: "/",
     element: <DefaultLayout />,
     children: [
-      // {
-      //   path: "/",
-      //   element: <Navigate to="/acceuil" />,
-      // },
       {
         path: "/",
+        element: <Navigate to="/acceuil" />,
+      },
+      {
+        path: "/acceuil",
         element: <Acceuil />,
       },
       {
@@ -96,7 +95,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/auth",
+    path: "/",
     element: <GuestLayout />,
     children: [
       {
@@ -171,7 +170,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-    {
+  {
     path: "/",
     element: <Profil />,
     children: [
