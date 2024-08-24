@@ -58,9 +58,11 @@ console.log(Id)
     for (const key in serviceData) {
       formData.append(key, serviceData[key]);
     }
+        // Ajouter le paramètre de spoofing de méthode
+        formData.append("_method", "PUT");
 
     try {
-      const response = await axios.put(`/services/${jobId}`, formData, {
+      const response = await axios.post(`/services/${jobId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

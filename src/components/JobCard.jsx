@@ -125,10 +125,10 @@ const JobCard = ({
           } bg-opacity-50`}
         >
           <div className="text-center">
-            <p className="text-lg font-semibold text-gray-50">{title}</p>
-            <p className="text-sm text-gray-100">{location}</p>
+            <p className="text-lg font-bold text-white">{title}</p>
+            <p className="text-sm text-white">{location}</p>
             <div className="mt-2">
-              <span className="border rounded-full py-1 px-3 text-xs font-semibold text-gray-100">
+              <span className="border rounded-full py-1 px-3 text-xs font-semibold text-white bg-gray-600">
                 {type === "work" ? "Service de travail" : "Matériel"}
               </span>
             </div>

@@ -70,7 +70,7 @@ const Header = () => {
       <div className="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex gap-5 lg:h-screen lg:items-center lg:px-8">
         <div className="max-w-xl text-left">
           <div
-            className="bg-white bg-opacity-35 bc rounded md:mt-0 mt-20"
+            className="bg-black bg-opacity-35 bc rounded md:mt-0 mt-20"
             style={{ fontFamily: "poetsen" }}
           >
             <h1
@@ -91,7 +91,7 @@ const Header = () => {
               </span>
             )}
           </div>
-          <p className="mt-4 text-sm font-bold lg:text-base text-white dark:text-gray-400 rounded p-4 bg-white bg-opacity-35">
+          <p className="mt-4 text-sm font-bold lg:text-base text-white dark:text-gray-400 rounded p-4 bg-black bg-opacity-35">
             {isLoggedIn
               ? "Vous êtes maintenant connecté. Explorez vos options et profitez de notre service."
               : "Joignez-vous à la communauté agricole pour développer vos projets et optimiser vos ressources."}
@@ -100,12 +100,12 @@ const Header = () => {
           <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row mb-6">
             {isLoggedIn ? (
               <>
-                <a
+                {/* <a
                   href={`/profil/${user.id}`}
                   className="block px-5 py-2 text-sm tracking-wider text-center text-white bg-[#4CAF50] hover:bg-[#43A047]/80 focus:ring-4 focus:outline-none focus:ring-[#43A047]/50 font-medium rounded-lg"
                 >
                   Mon profile
-                </a>
+                </a> */}
               </>
             ) : (
               <>

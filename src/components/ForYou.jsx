@@ -38,7 +38,7 @@ const ForYou = () => {
         {/* Second Card */}
         <div
           className="flex flex-col items-center bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 hover:-translate-y-2 cursor-pointer"
-          onClick={() => handleCardClick("/profil/createservice")}
+          onClick={() => handleCardClick("/ouvriers")}
         >
           <img
             src="src/assets/People.png"

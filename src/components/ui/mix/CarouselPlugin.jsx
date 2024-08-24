@@ -10,9 +10,7 @@ import {
 import { useRef } from "react";
 
 export default function CarouselPlugin() {
-  const plugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
-  );
+  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   // Définissez un tableau d'images spécifiques
   const specificImages = [
@@ -36,14 +34,22 @@ export default function CarouselPlugin() {
         {" "}
         {/* Ajustez la hauteur du carousel ici */}
         {specificImages.map((image, index) => (
-          <CarouselItem key={index} className="border-none">
+          <CarouselItem
+            key={index}
+            className="border-none"
+
+            // opts={{
+            //   align: "start",
+            //   loop: true,
+            // }}
+          >
             <div className="p-1 h-full">
               <Card className="border-none h-full">
                 <CardContent className="flex items-center justify-center p-0 h-full">
                   <img
                     src={image}
                     alt={`Image ${index + 1}`}
-                    className="object-cover h-full w-full rounded-xl" 
+                    className="object-cover h-full w-full rounded-xl"
                   />
                 </CardContent>
               </Card>

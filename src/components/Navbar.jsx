@@ -53,21 +53,21 @@ export default function Navbar() {
       <div className="px-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img src={images.logo} className="h-7 w-auto" alt="Logo" />
+            <img src={images.logo} className="h-9 w-auto" alt="Logo" />
           </Link>
           <div className="hidden md:flex md:items-center md:gap-5">
             <Link to="/acceuil" className={isActive("/acceuil")}>Accueil</Link>
             <Link to="/services" className={isActive("/services")}>Publications</Link>
             <Link to="/ouvriers" className={isActive("/ouvriers")}>Ouvriers</Link>
-            {token && roles.includes("exploitant") && (
+            {/* {token && roles.includes("exploitant") && (
               <Link to="/profil/createservice" className={isActive("/profil/createservice")}>Poster offre</Link>
-            )}
-            {token && roles.includes("ouvrier") && (
+            )} */}
+            {/* {token && roles.includes("ouvrier") && (
               <Link to="/search-offers" className={isActive("/search-offers")}>Rechercher des offres</Link>
-            )}
-            {token && (
+            )} */}
+            {/* {token && (
               <Link to="/profil" className={isActive("/profil")}>Mon Profil</Link>
-            )}
+            )} */}
           </div>
           <div className="flex items-center space-x-3">
             {token ? (

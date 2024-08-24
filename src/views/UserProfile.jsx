@@ -33,7 +33,7 @@ const categories = [
 const UserProfile = () => {
   const [profiles, setProfiles] = useState([]);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
-  const [ setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Ajout correct de l'état loading
   const [error, setError] = useState(null);
   const { token } = UserContext();
   
@@ -87,9 +87,10 @@ const UserProfile = () => {
   if (!token) {
     return <Navigate to={"/login"} />;
   } else {
-   
+    if (loading) return <p className="mt-40">Chargement...</p>;
 
     if (error) return <p className="mt-40">Erreur: {error.message}</p>;
+    
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
     const currentProfiles = filteredProfiles.slice(

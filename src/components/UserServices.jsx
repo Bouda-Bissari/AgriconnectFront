@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
-import SkeletonJobCard from "./Skeleton";
+// import SkeletonJobCard from "./Skeleton";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
 import { Link, useParams } from "react-router-dom";
@@ -34,7 +35,7 @@ const UserServices = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center my-20 w-full">
+      <div className="flex flex-col items-center justify-center my-20 w-full ">
         <h2
           className="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2"
           style={{ fontFamily: "poetsen" }}
@@ -55,9 +56,9 @@ const UserServices = () => {
   const currentPosts = services.slice(firstPostIndex, lastPostIndex);
 
   return (
-    <div className="flex flex-col items-center justify-center my-20 p-4 w-full">
+    <div className="flex flex-col items-center justify-center w-full mx-20 place-items-center  p-4  ">
       <h2
-        className="md:text-3xl text-xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2"
+        className="md:text-3xl text-xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2 text-center"
         style={{ fontFamily: "poetsen" }}
       >
         Vos Publications de Besoins de Main d&apos;Œuvre
@@ -84,7 +85,9 @@ const UserServices = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 w-full pl-10">
+        <div
+          className="grid place-items-center w-full ml-32" >
+                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 gap-10  w-4/5">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}
@@ -98,6 +101,7 @@ const UserServices = () => {
               userId={service.user_id}
             />
           ))}
+          </div>
         </div>
       )}
 
