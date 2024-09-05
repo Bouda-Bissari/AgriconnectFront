@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import DetailCandidatureEx from "./DetailCandidatureEx";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "../components/Pagination";
-import SkeletonDetailCandidature from "../components/SkeletonDetailCandidature ";
 import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const DisplayCandidatureEx = () => {
   const [candidatures, setCandidatures] = useState([]);
@@ -12,8 +13,8 @@ const DisplayCandidatureEx = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
-  const [statusUpdated, setStatusUpdated] = useState(false); 
-
+  const [statusUpdated, setStatusUpdated] = useState(false);
+  const navigate = useNavigate();
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
 
   // useEffect(() => {
@@ -37,10 +38,12 @@ const DisplayCandidatureEx = () => {
   useEffect(() => {
     const fetchCandidatures = async () => {
       try {
-        const response = await axiosClient.get( `/candidatures/service-owner/${userId}`);
+        const response = await axiosClient.get(
+          `/candidatures/service-owner/${userId}`
+        );
         // Filtrer les candidatures dont le statut n'est pas 'deleted'
         const filteredCandidatures = response.data.filter(
-          (candidature) => candidature.status !== 'deleted'
+          (candidature) => candidature.status !== "deleted"
         );
         setCandidatures(filteredCandidatures);
         setLoading(false);
@@ -48,26 +51,29 @@ const DisplayCandidatureEx = () => {
         setError(err);
         setLoading(false);
         setStatusUpdated(false);
-
       }
     };
-  
+
     fetchCandidatures();
-  }, [userId]);
-  
-
-
-
+  }, [userId, setStatusUpdated]);
 
   if (loading) {
     return (
       <div className="my-20 w-full flex justify-center items-center flex-col">
+        
+        <Button
+          onClick={() => navigate("/ouvriers")}
+          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 mb-10"
+        >
+          Voir les ouvriers
+        </Button>
         <h2
           className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
           style={{ fontFamily: "poetsen" }}
         >
           Candidatures recues
         </h2>
+
         <div className="flex justify-center items-center flex-col md:gap-20 gap-20 w-full ">
           {/* {Array.from({ length: postsPerPage }).map((_, index) => (
             <SkeletonDetailCandidature key={index} />
@@ -82,7 +88,13 @@ const DisplayCandidatureEx = () => {
 
   if (candidatures.length === 0) {
     return (
-      <div className="my-20 flex justify-center items-center flex-col">
+      <div className="my-20 w-full flex justify-center items-center flex-col">
+        <Button
+          onClick={() => navigate("/ouvriers")}
+          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4 mb-10"
+        >
+          Voir les ouvriers
+        </Button>
         <h2
           className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
           style={{ fontFamily: "poetsen" }}

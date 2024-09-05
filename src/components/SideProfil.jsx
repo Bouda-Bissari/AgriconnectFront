@@ -3,6 +3,8 @@ import axiosClient from "../configs/axiosClient";
 import { UserContext } from "../contexts/ContextProvider";
 import images from "../assets/index.jsx";
 import { useEffect, useState } from "react";
+import ProfileCompletionAlert from "./ProfileCompletionAlert";
+import { PublierBesoinDialog } from "./PublierBesoinDialog";
 
 const SideProfil = () => {
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
@@ -13,20 +15,37 @@ const SideProfil = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axiosClient.get('/notifications')
-      .then(response => {
-        const unreadCount = response.data.filter(notification => !notification.read_at).length;
-        setUnreadCount(unreadCount);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Erreur lors du chargement des notifications', error);
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
+  console.log(roles);
+  // Fonction pour charger le nombre de notifications non lues
+  const fetchUnreadCount = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosClient.get("/notifications");
+      const unreadCount = response.data.filter(
+        (notification) => !notification.read_at
+      ).length;
+      setUnreadCount(unreadCount);
+      setError(null);
+    } catch (error) {
+      console.error("Erreur lors du chargement des notifications", error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // useEffect(() => {
+  //   fetchUnreadCount(); // Charger les notifications au chargement du composant
+
+  //   const intervalId = setInterval(fetchUnreadCount, 30000); // Rafraîchissement toutes les 30 secondes
+
+  //   return () => clearInterval(intervalId); // Nettoyer l'intervalle au démontage
+  // }, []); // Le tableau de dépendances vide assure que l'effet s'exécute une seule fois
+
+
+  useEffect(()=>{
+    fetchUnreadCount(); 
+  },[])
   const onLogout = () => {
     axiosClient.post("/logout").then(() => {
       setUser({});
@@ -42,10 +61,12 @@ const SideProfil = () => {
     }`;
 
   return (
-    <div className="hidden w-full md:block h-screen bg-gray-100 dark:bg-gray-800">
-      <div className="sticky top-0 h-full p-4 text-sm border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-y-auto">
-        
-        <Link to="/" className="flex items-center justify-center mb-4 p-5 space-x-3 rtl:space-x-reverse bg-orange-200 rounded-lg hover:shadow-md">
+    <div className="hidden w-full md:block h-screen bg-gray-100 dark:bg-gray-800 ">
+      <div className="sticky top-0 h-full p-4 text-sm border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-y-auto ">
+        <Link
+          to="/"
+          className="flex items-center justify-center mb-4 p-5 space-x-3 rtl:space-x-reverse bg-orange-200 rounded-lg hover:shadow-md"
+        >
           <img src={images.logo} className="h-[4rem] w-[8rem]" alt="Logo" />
         </Link>
 
@@ -65,20 +86,12 @@ const SideProfil = () => {
               Mes Publications
             </Link>
           )}
-
-          <Link
-            to="/profil/user/candidature"
-            className={linkClasses("/profil/user/candidature")}
-          >
-            Mes Candidatures
-          </Link>
-
-          {token && roles.includes("exploitant") && (
+          {roles.includes("ouvrier") && (
             <Link
-              to="/profil/createservice"
-              className={linkClasses("/profil/createservice")}
+              to="/profil/user/candidature"
+              className={linkClasses("/profil/user/candidature")}
             >
-              Poster offre
+              Mes Candidatures
             </Link>
           )}
 
@@ -96,33 +109,31 @@ const SideProfil = () => {
             className={`${linkClasses("/profil/notifications")} relative`}
           >
             Notifications
-            {loading ? (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                Chargement...
-              </span>
-            ) : error ? (
+            {error ? (
               <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                 Erreur
               </span>
-            ) : unreadCount > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                {unreadCount}
-              </span>
+            ) : (
+              unreadCount > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  {unreadCount}
+                </span>
+              )
             )}
           </Link>
-
-          <Link to="/" className={linkClasses("/")}>
-            Page d&apos;Accueil
-          </Link>
+          {roles.includes("ouvrier") && (
+           <PublierBesoinDialog />
+          )}
         </div>
-
         <button
           onClick={onLogout}
-          className="w-full px-4 py-2 mt-4 text-sm font-semibold bg-red-500 rounded text-white hover:bg-red-900 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white"
+          className="w-full px-4 py-2 mt-24 text-sm font-semibold bg-red-400 rounded text-white hover:bg-red-900 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white"
         >
           Se Déconnecter
         </button>
+        
       </div>
+      
     </div>
   );
 };

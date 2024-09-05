@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import axiosClient from '@/configs/axiosClient';
+import Loading from '@/components/Loading';
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true); // Set to true initially
 
     useEffect(() => {
+        setLoading(true);
         axiosClient.get('/notifications')
-            .then(response => setNotifications(response.data))
-            .catch(error => console.error('Erreur lors du chargement des notifications', error));
+            .then(response => {
+                setNotifications(response.data);
+            })
+            .catch(error => console.error('Erreur lors du chargement des notifications', error))
+            .finally(() => setLoading(false)); // Set loading to false after request completes
     }, []);
 
     const markAsRead = (id) => {
@@ -28,8 +34,16 @@ const Notifications = () => {
             .catch(error => console.error('Erreur lors de la suppression de la notification', error));
     };
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Loading /> 
+            </div>
+        );
+    }
+
     return (
-        <div className="max-w-lg mx-auto mt-10">
+        <div className="max-w-3xl mx-auto mt-10">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">Notifications</h2>
             <ul className="space-y-4">
                 {notifications.map(notification => (

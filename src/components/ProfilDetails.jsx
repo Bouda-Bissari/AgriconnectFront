@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 const ProfilDetails = () => {
   const { userId } = useParams();
-  const { token } = UserContext();
+  const { token,setIsCompleted } = UserContext();
   const { toast } = useToast()
 
   const [profile, setProfile] = useState({
@@ -24,9 +24,31 @@ const ProfilDetails = () => {
     phone_number: "",
     imageFile: null,
   });
+
+
+    // Fonction pour formater les numéros de téléphone
+const formatPhoneNumber = (phone) => {
+  if (!phone || phone.length !== 11) return phone; // Vérifie si le numéro est valide
+
+  const countryCode = phone.slice(0, 3); 
+  const part1 = phone.slice(3, 5); 
+  const part2 = phone.slice(5, 7); 
+  const part3 = phone.slice(7, 9); 
+  const part4 = phone.slice(9, 11); 
+
+  return `+${countryCode} ${part1} ${part2} ${part3} ${part4}`;
+};
+
+// Fonction pour enlever le formatage lors de l'édition
+const handlePhoneNumberChange = (e) => {
+  const value = e.target.value.replace(/\s+/g, '').replace('+228', '');
+  setPhoneNumber(value);
+};
+
   const [error, setError] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [phoneNumber, setPhoneNumber] = useState(""); 
+  const [isEditing, setIsEditing] = useState(false); 
   useEffect(() => {
     axios
       .get(`/profile/${userId}`)
@@ -49,6 +71,7 @@ const ProfilDetails = () => {
           fullName: userData.fullName || "",
           phone_number: userData.phone_number || "",
         }));
+        setPhoneNumber(userData.phone_number || ""); 
       })
       .catch((error) => {
         if (error.response) {
@@ -166,6 +189,8 @@ const ProfilDetails = () => {
       })
       .then((response) => {
         setSuccessMessage("Profil mis à jour avec succès.");
+        setIsCompleted(response.data.completed);
+
         toast({
           position: "top-right",
           className:"text-2xl",
@@ -248,6 +273,9 @@ const ProfilDetails = () => {
                 <img
                   src={profile.image}
                   alt="Profile Image"
+                  onError={(e) => {
+                    e.target.src = images.person; 
+                  }}
                   className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-orange-300 dark:ring-green-500"
                 />
               ) : (
@@ -301,6 +329,7 @@ const ProfilDetails = () => {
                 <input
                   type="text"
                   id="fullName"
+
                   className={`bg-orange-50 border ${
                     error.fullName ? "border-red-500" : "border-orange-300"
                   } text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5`}
@@ -315,24 +344,30 @@ const ProfilDetails = () => {
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
-                  Numéro de téléphone
+              <label className="block mb-2 text-sm font-medium text-orange-900 dark:text-white">
+                  Numéro de Téléphone
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      id="phone_number"
+                      value={phoneNumber}
+                      required
+                      onChange={handlePhoneNumberChange}
+                      className="border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      id="phone_number"
+                      value={formatPhoneNumber(phoneNumber)}
+                      readOnly
+                      className="border border-orange-300 text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                      onFocus={() => setIsEditing(true)}
+                    />
+                  )}
                 </label>
-                <input
-                  type="text"
-                  id="phone_number"
-                  className={`bg-orange-50 border ${
-                    error.phone_number ? "border-red-500" : "border-orange-300"
-                  } text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5`}
-                  placeholder="0123456789"
-                  value={profile.phone_number}
-                  onChange={handleChange}
-                  required
-                />
                 {error.phone_number && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {error.phone_number}
-                  </p>
+                  <div className="text-red-500">{error.phone_number}</div>
                 )}
               </div>
 
@@ -388,6 +423,7 @@ const ProfilDetails = () => {
                       checked={profile.gender === "Masculin"}
                       onChange={handleChange}
                       className="form-radio"
+                      required
                     />
                     <span className="ml-2">Homme</span>
                   </label>
@@ -471,12 +507,14 @@ const ProfilDetails = () => {
                 </label>
                 <textarea
                   id="bio"
+                  rows="4"
                   className={`bg-orange-50 border ${
                     error.bio ? "border-red-500" : "border-orange-300"
                   } text-orange-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5`}
                   placeholder="Parlez de vous..."
                   value={profile.bio}
                   onChange={handleChange}
+                  required
                 />
                 {error.bio && (
                   <p className="text-red-500 text-xs mt-1">{error.bio}</p>

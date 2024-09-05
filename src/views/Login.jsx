@@ -6,7 +6,7 @@ import images from "../assets/index.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser, setToken, setRoles, setIsCompleted } = UserContext();
+  const { setUser, setToken, setRoles, setIsActive,setIsCompleted } = UserContext();
   const [errors, setErrors] = useState({});
 
   const [form, setForm] = useState({
@@ -41,13 +41,19 @@ export default function Login() {
         phone_number: formattedPhoneNumber,
       })
       .then((response) => {
-        const { user, roles, is_completed, token } = response.data;
+        const { user, roles, is_active, token, is_blocked,is_completed } = response.data;
         
+        if (is_blocked) {
+          setErrors({ message: "Votre compte est bloqué. Veuillez contacter l'administrateur à adminaaaaaaaa2@gmail.com" });
+          return;
+        }
+
         setUser(user);
         setRoles(roles);
-        setIsCompleted(is_completed); // Mettre à jour isCompleted
+        setIsActive(is_active);
+        setIsCompleted(is_completed) 
         
-        if (is_completed) {
+        if (is_active) {
           setToken(token);
           navigate("/");
         } else {
@@ -78,9 +84,9 @@ export default function Login() {
         >
           <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
             <div className="bg-black bg-opacity-40 rounded-xl p-5">
-              <h2 className="text-2xl font-extrabold text-white sm:text-3xl" style={{ fontFamily: "poetsen" }}>
+              <Link to={'/'} className="text-2xl font-extrabold hover:text-orange-300 sm:text-3xl text-orange-500" style={{ fontFamily: "poetsen" }}>
                 AgriConnect
-              </h2>
+              </Link>
               <p className="max-w-xl mt-3 text-gray-300 font-bold">
                 Connectez-vous avec des professionnels de l&apos;agriculture,
                 échangez des services et développez votre réseau.
@@ -133,12 +139,7 @@ export default function Login() {
                   >
                     Mot de passe
                   </label>
-                  <a
-                    href="#"
-                    className="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline"
-                  >
-                    Mot de passe oublié ?
-                  </a>
+                 
 
                 </div>
                 <input

@@ -143,7 +143,7 @@ const Services = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-20 gap-2 w-3/4">
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-2 gap-2 ">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}

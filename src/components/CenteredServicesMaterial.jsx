@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
-import { AlertCompleted } from "./AlertCompleted";
-import { UserContext } from "@/contexts/ContextProvider";
+// import { AlertCompleted } from "./AlertCompleted";
 import search from "../assets/search.png";
 import LoadingSpinner from "./Loading";
 
@@ -13,10 +12,10 @@ const CenteredServicesMaterial = () => {
   const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
+  const [postsPerPage] = useState(4);
 
-  const { token } = UserContext();
-  const isLoggedIn = !!token;
+  // const { token } = UserContext();
+  // const isLoggedIn = !!token;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -61,7 +60,7 @@ const CenteredServicesMaterial = () => {
 
   return (
     <div className="my-5 w-full flex justify-center items-center flex-col">
-      {isLoggedIn && <AlertCompleted />}
+      {/* {isLoggedIn && <AlertCompleted />} */}
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
@@ -82,7 +81,7 @@ const CenteredServicesMaterial = () => {
       ) : (
         <div
           className="grid place-items-center" >
-                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-2 gap-20 ">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}
@@ -98,14 +97,14 @@ const CenteredServicesMaterial = () => {
           </div>
         </div>
       )}
-      {materialServices.length > postsPerPage && (
+      {/* {materialServices.length > postsPerPage && (
         <Pagination
           totalPosts={materialServices.length}
           postsPerPage={postsPerPage}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
         />
-      )}
+      )} */}
     </div>
   );
 };

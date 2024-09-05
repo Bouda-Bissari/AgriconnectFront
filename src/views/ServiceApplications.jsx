@@ -66,14 +66,14 @@ const ServiceApplications = () => {
   const currentPosts = candidatures.slice(firstPostIndex, lastPostIndex);
 
   return (
-    <div className="my-20 flex justify-center items-center flex-col w-4/5 mx-auto p-10">
+    <div className="my-20 flex justify-center items-center flex-col  p-10">
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
       >
         Candidatures du Service
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-1 md:gap-10 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-1 md:gap-10 gap-2 ">
         {currentPosts.map((candidature) => (
           <DetailCandidature
             key={candidature.id}

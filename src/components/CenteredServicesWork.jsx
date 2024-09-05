@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
-import { AlertCompleted } from "./AlertCompleted";
-import { UserContext } from "@/contexts/ContextProvider";
+// import { AlertCompleted } from "./AlertCompleted";
+// import { UserContext } from "@/contexts/ContextProvider";
 import search from "../assets/search.png";
 import LoadingSpinner from "./Loading";
 
@@ -13,10 +13,10 @@ const CenteredServicesWork = () => {
   const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
+  const [postsPerPage] = useState(4);
 
-  const { token } = UserContext();
-  const isLoggedIn = !!token;
+  // const { token } = UserContext();
+  // const isLoggedIn = !!token;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -61,7 +61,7 @@ const CenteredServicesWork = () => {
 
   return (
     <div className="my-5 w-full flex justify-center items-center flex-col">
-      {isLoggedIn && <AlertCompleted />}
+      {/* {isLoggedIn && <AlertCompleted />} */}
       <h2
         className="text-3xl font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
@@ -80,34 +80,31 @@ const CenteredServicesWork = () => {
           </p>
         </div>
       ) : (
-        <div
-          className="grid place-items-center" >
-                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
-
-          {currentPosts.map((service) => (
-            <JobCard
-              key={service.id}
-              type={service.service_type}
-              location={service.location}
-              title={service.title}
-              deadline={service.deadline}
-              jobId={service.id}
-              price={service.price}
-              imageUrl={service.image}
-            />
-          ))}
-              </div>
-
+        <div className="grid place-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-2 gap-2 ">
+            {currentPosts.map((service) => (
+              <JobCard
+                key={service.id}
+                type={service.service_type}
+                location={service.location}
+                title={service.title}
+                deadline={service.deadline}
+                jobId={service.id}
+                price={service.price}
+                imageUrl={service.image}
+              />
+            ))}
+          </div>
         </div>
       )}
-      {workServices.length > postsPerPage && (
+      {/* {workServices.length > postsPerPage && (
         <Pagination
           totalPosts={workServices.length}
           postsPerPage={postsPerPage}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
         />
-      )}
+      )} */}
     </div>
   );
 };

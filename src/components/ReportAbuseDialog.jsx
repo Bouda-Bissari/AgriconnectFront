@@ -59,13 +59,13 @@ export function ReportAbuseDialog({ service_id }) {
     <Dialog>
       <DialogTrigger asChild>
         <svg
-          fill="#ffffff"
+          fill="#ffa500"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 52 52"
           enableBackground="new 0 0 52 52"
           xmlSpace="preserve"
-          stroke="#ffffff"
-          className="absolute top-4 right-10 cursor-pointer w-6 h-6 mr-2 sm:mr-6"
+          stroke="#ffa500"
+          className="absolute -top-5 right-3 cursor-pointer w-7 h-7 mr-2 sm:mr-6 "
         >
           <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
           <g

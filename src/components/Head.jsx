@@ -110,14 +110,12 @@ const Header = () => {
             ) : (
               <>
                 <a
-                  href="#"
+                  href="/choix"
                   className="block px-5 py-2 text-sm tracking-wider text-center text-white bg-[#4CAF50] hover:bg-[#43A047]/80 focus:ring-4 focus:outline-none focus:ring-[#43A047]/50 font-medium rounded-lg"
                 >
                   Commencer
                 </a>
-                <button className="block px-5 py-2 text-sm font-medium tracking-wider text-center text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md lg:mx-4 hover:bg-gray-300">
-                  En savoir plus
-                </button>
+               
               </>
             )}
           </div>

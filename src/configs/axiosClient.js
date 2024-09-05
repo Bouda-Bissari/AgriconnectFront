@@ -2,8 +2,15 @@ import axios from 'axios';
 
 // Crée une instance d'axios avec une URL de base
 const axiosClient = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+
+    baseURL: 'http://127.0.0.1:8000/api'
     // baseURL: 'http://192.168.3.32:8000/api',
+    // baseURL: 'http://192.168.1.64:8000/api',
+        // baseURL: 'http://192.168.1.101:8000/api',
+
+
+
+    
 
     
 });

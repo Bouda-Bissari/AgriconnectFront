@@ -100,10 +100,10 @@ export default function Navbar() {
                     </div>
                     <ul className="py-2">
                       <li>
-                        <Link to={`/profil/${userId}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</Link>
+                        <Link to={`/profil/${userId}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</Link>
                       </li>
                       <li>
-                        <button onClick={onLogout} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-left">Logout</button>
+                        <button onClick={onLogout} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-left">Deconnexion</button>
                       </li>
                     </ul>
                   </div>
@@ -137,10 +137,10 @@ export default function Navbar() {
             {token && roles.includes("exploitant") && (
               <li><Link to="/profil/createservice" className={isActive("/profil/createservice")}>Poster offre</Link></li>
             )}
-            {token && roles.includes("ouvrier") && (
+            {/* {token && roles.includes("ouvrier") && (
               <li><Link to="/search-offers" className={isActive("/search-offers")}>Rechercher des offres</Link></li>
-            )}
-            {token && <li><Link to="/profil" className={isActive("/profil")}>Mon Profil</Link></li>}
+            )} */}
+            {/* {token && <li><Link to="/profil" className={isActive("/profil")}>Mon Profil</Link></li>} */}
           </ul>
         </div>
       </div>

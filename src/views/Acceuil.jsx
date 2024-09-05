@@ -46,6 +46,7 @@ export function Acceuil() {
       <div>
         <ForYou />
       </div>
+
     </div>
   );
 }

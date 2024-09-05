@@ -112,7 +112,7 @@ const ServicesMaterial = () => {
       ) : (
         <div
           className="grid place-items-center" >
-                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-2 gap-2">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}

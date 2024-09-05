@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import images from "../assets/index.jsx";
 import { Politique } from "./Politique.jsx";
 import { Termes } from "./Termes.jsx";
+import { AlertCompleted } from "./AlertCompleted.jsx";
 
 function Footer() {
   return (
@@ -52,7 +53,7 @@ function Footer() {
                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
                   <li className="mb-4">
                     <a
-                      href="https://github.com/votrecompte"
+                      href="https://github.com/Bouda-Bissari"
                       className="hover:underline "
                     >
                       GitHub
@@ -60,7 +61,7 @@ function Footer() {
                   </li>
                   <li>
                     <a
-                      href="https://www.linkedin.com/in/votreprofil"
+                      href="https://www.linkedin.com/in/bouda-bissari-696247295/"
                       className="hover:underline"
                     >
                       LinkedIn
@@ -97,12 +98,16 @@ function Footer() {
             <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2024{" "}
               <a href="https://votresite.com" className="hover:underline">
-                VotreSite™
+                Agriconnect™
               </a>
               . Tous droits réservés.
             </span>
           </div>
         </div>
+        <div>
+      <AlertCompleted />
+
+      </div>
       </footer>
     </div>
   );

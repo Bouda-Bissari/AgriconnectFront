@@ -2,11 +2,17 @@ import { useState } from "react";
 import axios from "../configs/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { UserContext } from "@/contexts/ContextProvider";
+import { ConfirmationDialog } from "./ConfirmationDialog";
 
 const CreateService = () => {
   const userId = JSON.parse(localStorage.getItem("USER_ID"));
   const { toast } = useToast();
-
+  const {isCompleted,setRoles} = UserContext()
+  const handleConfirm = async () => {
+     handleSubmit();
+  };
+  
   const [serviceData, setServiceData] = useState({
     title: "",
     description: "",
@@ -18,6 +24,9 @@ const CreateService = () => {
   });
   const [alert, setAlert] = useState({ type: "", message: "" });
   const navigate = useNavigate();
+
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,21 +43,23 @@ const CreateService = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+  
     const formData = new FormData();
     for (const key in serviceData) {
-      formData.append(key, serviceData[key]);
+      if (serviceData[key]) { // Vérifier si la valeur existe avant de l'ajouter
+        formData.append(key, serviceData[key]);
+      }
     }
-
+  
     try {
-      // eslint-disable-next-line no-unused-vars
+      // Envoyer les données via Axios
       const response = await axios.post("/services", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      setRoles(response.data.roles); 
       // Afficher une alerte de succès
       setAlert({ type: "success", message: "Service créé avec succès !" });
       toast({
@@ -60,30 +71,33 @@ const CreateService = () => {
         isClosable: true,
         icon: "✔️",
         style: {
-          backgroundColor: "#4caf50", // Couleur de fond
+          backgroundColor: "#4caf50",
           color: "#fff",
-          fontFamily: "poesten",
+          fontFamily: "poetsen",
         },
-
         transition: "Bounce",
       });
-
-      // Rediriger l'utilisateur
+  
+      // Rediriger l'utilisateur après 2 secondes
       setTimeout(() => {
         navigate(`/profil/user/${userId}/services`);
-      }, 2000); // Délai de 2 secondes pour que l'utilisateur voie l'alerte
+      }, 2000);
     } catch (error) {
-      // Afficher une alerte d'erreur
+      // Afficher une alerte d'erreur et loguer les détails de l'erreur
       setAlert({ type: "error", message: "Erreur lors de la création du service." });
+      console.error("Erreur de création de service:", error.response ? error.response.data : error);
     }
   };
+  
 
   const serviceTypeOptions = {
     work: "Main d'oeuvre",
     material: "Produit",
   };
+  if(isCompleted){
 
   return (
+
     <div className="mt-20">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-3xl w-full">
         <h3
@@ -183,7 +197,7 @@ const CreateService = () => {
                 name="image"
                 onChange={handleImageChange}
                 className="block w-full text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 file:border-0 file:bg-gray-100 file:text-gray-900 file:rounded-lg file:p-2.5 focus:ring-orange-500 focus:border-orange-500"
-                required
+                
               />
             </div>
           </div>
@@ -201,16 +215,22 @@ const CreateService = () => {
             ></textarea>
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full py-3 px-4 text-sm font-medium text-white bg-orange-600 rounded-lg shadow-lg hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 dark:bg-orange-500 dark:hover:bg-orange-600 dark:focus:ring-orange-400"
           >
-            Créer un Service
-          </button>
+            Publier
+          </button> */}
+                    <ConfirmationDialog onConfirm={handleConfirm} />
+
+
+
+
         </form>
       </div>
     </div>
   );
+}
 };
 
 export default CreateService;

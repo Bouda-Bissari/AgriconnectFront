@@ -3,7 +3,8 @@ import imagePath from "../configs/imageUrl.js";
 import images from "../assets/index.jsx";
 import axiosClient from "@/configs/axiosClient.js";
 import { Button } from "@/components/ui/button.jsx";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 // import { toast } from 'react-toastify';
 const formatDate = (dateString) => {
   if (!dateString) return "Date non disponible";
@@ -64,54 +65,93 @@ const DetailCandidatureEx = ({
   status,
   setStatusUpdated,
 }) => {
-  const { toast } = useToast()
+  const { toast } = useToast();
+  const [currentStatus, setCurrentStatus] = useState(status);
+  const [refresh, setRefresh] = useState(false); // Variable pour déclencher le rechargement
 
   const role = localStorage.getItem("USER_ROLES");
-  console.log(role);
 
+  // Fonction pour formater les numéros de téléphone
+  const formatPhoneNumber = (phone) => {
+    if (!phone || phone.length !== 11) return phone; // Vérifie si le numéro est valide
 
+    const countryCode = phone.slice(0, 3);
+    const part1 = phone.slice(3, 5);
+    const part2 = phone.slice(5, 7);
+    const part3 = phone.slice(7, 9);
+    const part4 = phone.slice(9, 11);
 
+    return `+${countryCode} ${part1} ${part2} ${part3} ${part4}`;
+  };
 
-  
+  // const fetchCandidatureDetails = async () => {
+  //   try {
+  //     const response = await axiosClient.get(`/candidatures/${id}`);
+  //     const updatedData = response.data;
+  //     setCurrentStatus(updatedData.status);
+  //     // Mettre à jour d'autres données si nécessaire
+  //   } catch (error) {
+  //     console.error("Erreur lors de la récupération des détails de la candidature:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchCandidatureDetails();
+  // }, []);
+
   const updateStatus = async (newStatus) => {
     try {
       const response = await axiosClient.put(`/candidatures/${id}/status`, {
         status: newStatus,
       });
-      // alert(response.data.message);
-      console.log(response)
-
-      setStatusUpdated(true);
-      // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
+      setCurrentStatus(newStatus); // Update the local status state
+      toast({
+        position: "top-right",
+        className: "text-2xl",
+        title: "Action réussie",
+        description: "Le statut a été mis à jour avec succès.",
+        status: "success",
+        isClosable: true,
+        icon: "✔️",
+        style: {
+          backgroundColor: "#4caf50", // Couleur de fond
+          color: "#fff",
+          fontFamily: "poesten",
+        },
+        transition: "Bounce",
+      });
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la candidature:", error);
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
-const handleAccept = () => {updateStatus("accepted");
-  toast({
-    position: "top-right",
-    className:"text-2xl",
-    title: "Action réussie",
-    description: "Le statut a été mis à jour avec succès.",
-    status: "success",
-    isClosable: true,
-    icon: '✔️', 
-    style: {
-      backgroundColor: '#4caf50', // Couleur de fond
-      color: '#fff',
-      fontFamily:'poesten'
-    },
-    
-    transition: 'Bounce',
-    
-  });
-};
-  const handleReject = () => updateStatus("rejected");
+  const handleAccept = () => {
+    updateStatus("accepted");
+    setRefresh((prev) => !prev);
+    toast({
+      position: "top-right",
+      className: "text-2xl",
+      title: "Action réussie",
+      description: "Le statut a été mis à jour avec succès.",
+      status: "success",
+      isClosable: true,
+      icon: "✔️",
+      style: {
+        backgroundColor: "#4caf50", // Couleur de fond
+        color: "#fff",
+        fontFamily: "poesten",
+      },
+
+      transition: "Bounce",
+    });
+  };
+  const handleReject = () => {
+    updateStatus("rejected");
+    setRefresh((prev) => !prev);
+  };
 
   return (
-    <section className="container w-4/5 mx-auto max-w-6xl rounded-lg bg-gray-900 text-white shadow-lg p-6">
+    <section className="container  mx-auto max-w-6xl rounded-lg bg-gray-900 text-white shadow-lg p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4 border-4 rounded-xl p-5">
           <h1
@@ -125,17 +165,23 @@ const handleAccept = () => {updateStatus("accepted");
           </p>
 
           <div className="space-y-4">
-            {phoneNumber && (
+            {fullName && (
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
                   className="w-6 h-6 mr-2 text-gray-400"
                 >
-                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 12.75v3.75a1.5 1.5 0 001.5 1.5h15a1.5 1.5 0 001.5-1.5v-3.75M6.75 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z"
+                  />
                 </svg>
-                <span className="font-semibold">{phoneNumber}</span>
+                <span className="font-semibold">Nom : {fullName}</span>
               </div>
             )}
 
@@ -151,6 +197,52 @@ const handleAccept = () => {updateStatus("accepted");
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                 </svg>
                 <span className="font-semibold">{email}</span>
+              </div>
+            )}
+
+            {phoneNumber && (
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-6 h-6 mr-2 text-gray-400"
+                >
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                </svg>
+                <span className="font-semibold">
+                  {formatPhoneNumber(phoneNumber)}
+                </span>
+              </div>
+            )}
+
+            {message && (
+              <div className="flex items-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mr-2 text-gray-400"
+
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      d="M3 7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2Z"
+                      stroke="#726e6e"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>{" "}
+                  </g>
+                </svg>
+                <span className="font-semibold">Message : {message}</span>
               </div>
             )}
 
@@ -175,40 +267,6 @@ const handleAccept = () => {updateStatus("accepted");
                 </span>
               </div>
             )}
-
-            {message && (
-              <div className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-6 h-6 mr-2 text-gray-400"
-                >
-                  <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 111.414 1.414L11 8.414l4.293 4.293a1 1 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 010-1.414z" />
-                </svg>
-                <span className="font-semibold">Message : {message}</span>
-              </div>
-            )}
-
-            {fullName && (
-              <div className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6 mr-2 text-gray-400"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 12.75v3.75a1.5 1.5 0 001.5 1.5h15a1.5 1.5 0 001.5-1.5v-3.75M6.75 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z"
-                  />
-                </svg>
-                <span className="font-semibold">Nom complet : {fullName}</span>
-              </div>
-            )}
           </div>
 
           <div className="flex items-center">
@@ -231,20 +289,50 @@ const handleAccept = () => {updateStatus("accepted");
           </div>
 
           {role && role.includes("exploitant") && (
+            // <div className="flex space-x-4 mt-4">
+            //   <Button
+            //   variant="outline"
+            //     onClick={handleAccept}
+
+            //     className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
+            //   >
+            //     Accepter
+            //   </Button>
+            //   <button
+            //     onClick={handleReject}
+
+            //     className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600"
+            //   >
+            //     Rejeter
+            //   </button>
+            // </div>
+
             <div className="flex space-x-4 mt-4">
-              <Button
-              variant="outline"
-                onClick={handleAccept}
-                className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
-              >
-                Accepter
-              </Button>
-              <button
-                onClick={handleReject}
-                className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600"
-              >
-                Rejeter
-              </button>
+              {currentStatus === "pending" && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={handleAccept}
+                    disabled={
+                      currentStatus === "accepted" ||
+                      currentStatus === "rejected"
+                    }
+                    className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
+                  >
+                    Accepter
+                  </Button>
+                  <button
+                    onClick={handleReject}
+                    disabled={
+                      currentStatus === "accepted" ||
+                      currentStatus === "rejected"
+                    }
+                    className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600"
+                  >
+                    Rejeter
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -264,7 +352,7 @@ const handleAccept = () => {updateStatus("accepted");
             />
           )}
 
-          <StatusBadge status={status} />
+          <StatusBadge status={currentStatus} />
         </div>
       </div>
     </section>

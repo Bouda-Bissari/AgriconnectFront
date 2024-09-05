@@ -3,8 +3,8 @@ import JobCard from "./JobCard";
 import SkeletonJobCard from "./Skeleton"; // Import the Skeleton component
 import axiosClient from "../configs/axiosClient";
 import Pagination from "./Pagination";
-import { AlertCompleted } from "./AlertCompleted";
-import { UserContext } from "@/contexts/ContextProvider";
+// import { AlertCompleted } from "./AlertCompleted";
+// import { UserContext } from "@/contexts/ContextProvider";
 import search from "../assets/search.png";
 
 const ServicesWork = () => {
@@ -17,8 +17,8 @@ const ServicesWork = () => {
 
   const [searchTerm, setSearchTerm] = useState(""); // State for search input
 
-  const { token } = UserContext();
-  const isLoggedIn = !!token;
+  // const { token } = UserContext();
+  // const isLoggedIn = !!token;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -68,7 +68,7 @@ const ServicesWork = () => {
 
   return (
     <div className="my-20 w-full flex justify-center items-center flex-col">
-      {isLoggedIn && <AlertCompleted />}
+      {/* {isLoggedIn && <AlertCompleted />} */}
       <h2
         className="text-3xl mt-10 font-bold text-gray-900 mb-6 border-b-2 border-green-600 pb-2"
         style={{ fontFamily: "poetsen" }}
@@ -115,7 +115,7 @@ const ServicesWork = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-20 gap-2 w-3/4">
+        <div className="grid grid-cols-2 md:grid-cols-4 xs:grid-cols-2 md:gap-2 gap-2 ">
           {currentPosts.map((service) => (
             <JobCard
               key={service.id}

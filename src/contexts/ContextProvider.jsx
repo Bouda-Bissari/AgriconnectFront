@@ -5,10 +5,13 @@ const StateContext = createContext({
   roles: [], 
   token: null,
   isCompleted: null, 
+  isActive: null, 
+
   setUser: () => {},
   setRoles: () => {}, 
   setToken: () => {},
-  setIsCompleted: () => {}, // Ajout de setIsCompleted dans le contexte
+  setIsCompleted: () => {},
+  setIsActive: () => {}, 
 });
 
 // eslint-disable-next-line react/prop-types
@@ -19,17 +22,19 @@ export const ContextProvider = ({ children }) => {
   const [isCompleted, _setIsCompleted] = useState(
     JSON.parse(localStorage.getItem("USER_COMPLETED")) || false
   );
+  const [isActive, _setIsActive] = useState(
+    JSON.parse(localStorage.getItem("USER_ACTIVE")) || false
+  );
 
   const setUser = (user) => {
     _setUser(user);
-  
+
     // Stockage de l'ID de l'utilisateur
     if (user && user.id) {
       localStorage.setItem("USER_ID", JSON.stringify(user.id));
     } else {
       localStorage.removeItem("USER_ID");
     }
-  
   };
   
   const setRoles = (roles) => {
@@ -62,17 +67,29 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const setIsActive = (isActive) => {
+    _setIsActive(isActive);
+
+    if (isActive) {
+      localStorage.setItem("USER_ACTIVE", JSON.stringify(isActive));
+    } else {
+      localStorage.removeItem("USER_ACTIVE");
+    }
+  };
+
   return (
     <StateContext.Provider
       value={{
         user,
         roles,
         token,
-        isCompleted, // Ajouter isCompleted au contexte
+        isCompleted,
+        isActive, // Add isActive to the context
         setRoles,
         setUser,
         setToken,
-        setIsCompleted, // Ajouter setIsCompleted au contexte
+        setIsCompleted,
+        setIsActive, // Add setIsActive to the context
       }}
     >
       {children}

@@ -4,11 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
 const UpdateService = () => {
-  const { jobId,Id } = useParams(); // Récupérer l'ID du service depuis les params
+  const { jobId, Id } = useParams(); // Récupérer l'ID du service depuis les params
   const navigate = useNavigate();
   const { toast } = useToast();
-console.log("Affichage de ID")
-console.log(Id)
+  console.log("Affichage de ID");
+  console.log(Id);
 
   const [serviceData, setServiceData] = useState({
     title: "",
@@ -58,8 +58,8 @@ console.log(Id)
     for (const key in serviceData) {
       formData.append(key, serviceData[key]);
     }
-        // Ajouter le paramètre de spoofing de méthode
-        formData.append("_method", "PUT");
+    // Ajouter le paramètre de spoofing de méthode
+    formData.append("_method", "PUT");
 
     try {
       const response = await axios.post(`/services/${jobId}`, formData, {
@@ -133,20 +133,6 @@ console.log(Id)
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={serviceData.description}
-                onChange={handleChange}
-                rows="4"
-                className="block w-full p-3 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-orange-500 focus:border-orange-500"
-                placeholder="Description du service"
-                required
-              ></textarea>
-            </div>
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Type de Service
               </label>
               <select
@@ -194,7 +180,7 @@ console.log(Id)
                 required
               />
             </div>
-            <div>
+            <div className="md:col-span-2">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Prix
               </label>
@@ -217,6 +203,20 @@ console.log(Id)
                 onChange={handleImageChange}
                 className="block w-full text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 file:border-0 file:bg-gray-100 file:text-gray-900 file:rounded-lg file:p-2.5 focus:ring-orange-500 focus:border-orange-500"
               />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Description
+              </label>
+              <textarea
+                name="description"
+                value={serviceData.description}
+                onChange={handleChange}
+                rows="4"
+                className="block w-full p-3 text-sm text-gray-900 bg-gray-100 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 focus:ring-orange-500 focus:border-orange-500"
+                placeholder="Description du service"
+                required
+              ></textarea>
             </div>
           </div>
           <button

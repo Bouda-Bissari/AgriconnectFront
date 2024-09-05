@@ -42,8 +42,9 @@ import back4 from './Back4.jpg'
 import back5 from './Back5.jpg'
 import back6 from './Back6.jpg'
 import back7 from './Back7.jpg'
-
+import Farmer from './Farmer.png'
 // import canceled  './canceled.png';
+import cash from './Cash.png'
 const images = {
   Image1,
   Image2,
@@ -79,8 +80,8 @@ const images = {
   back5,
   back6,
   back7,
-  
-
+  Farmer,
+  cash,
 
   Hero1,
   Hero2,

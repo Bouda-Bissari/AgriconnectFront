@@ -2,6 +2,7 @@
 import imagePath from "../configs/imageUrl.js";
 import images from "../assets/index.jsx";
 import axiosClient from "@/configs/axiosClient.js";
+import { useState } from "react";
 
 const formatDate = (dateString) => {
   if (!dateString) return "Date non disponible";
@@ -12,6 +13,20 @@ const formatDate = (dateString) => {
     day: "numeric",
   });
 };
+
+
+  // Fonction pour formater les numéros de téléphone
+  const formatPhoneNumber = (phone) => {
+    if (!phone || phone.length !== 11) return phone; // Vérifie si le numéro est valide
+  
+    const countryCode = phone.slice(0, 3); 
+    const part1 = phone.slice(3, 5); 
+    const part2 = phone.slice(5, 7); 
+    const part3 = phone.slice(7, 9); 
+    const part4 = phone.slice(9, 11); 
+  
+    return `+${countryCode} ${part1} ${part2} ${part3} ${part4}`;
+  };
 
 const formatPrice = (price) => {
   if (price === undefined || price === null) return "Prix non spécifié";
@@ -34,7 +49,7 @@ const StatusBadge = ({ status }) => {
 
   return (
     <div
-      className={`w-full h-ful p-20 flex items-center justify-center text-2xl rounded  font-semibold ${
+      className={`w-full h-full  p-20 flex items-center justify-center text-2xl rounded  font-semibold ${
         statusStyles[status] || "bg-gray-500 text-white"
       }`}
       style={{ fontFamily: "poetsen" }}
@@ -67,19 +82,20 @@ const DetailCandidature = ({
   message,
   status,
 }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
   const cancelCandidature = async () => {
     try {
       const response = await axiosClient.put(`/candidatures/${id}/status`, {
         status: "canceled",
       });
       alert(response.data.message);
-      // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
+      setIsVisible(false);
     } catch (error) {
       console.error("Erreur lors de l'annulation de la candidature:", error);
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
-
 
   const deleteCandidature = async () => {
     try {
@@ -87,12 +103,16 @@ const DetailCandidature = ({
         status: "deleted",
       });
       alert(response.data.message);
-      // Vous pouvez ajouter une logique pour mettre à jour l'état local ou rediriger l'utilisateur ici
+      setIsVisible(false); 
     } catch (error) {
       console.error("Erreur lors de la suppression de la candidature:", error);
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
+
+  if (!isVisible) {
+    return null; 
+  }
 
   const renderButton = () => {
     switch (status) {
@@ -117,9 +137,7 @@ const DetailCandidature = ({
       case "canceled":
         return (
           <button
-            
-            onClick={cancelCandidature}
-
+          disabled
             className="bg-yellow-600 text-white py-2 px-4 rounded w-full"
           >
             Annulée
@@ -128,33 +146,33 @@ const DetailCandidature = ({
       case "pending":
         return (
           <button
-          disabled
+            disabled
             // onClick={cancelCandidature}
             className="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded w-full"
           >
             En attente
           </button>
         );
-        case "deleted":
-          return (
-            <button
+      case "deleted":
+        return (
+          <button
             onClick={deleteCandidature}
-              className="bg-gray-600 text-white py-2 px-4 rounded w-full"
-            >
-              Supprimée
-            </button>
-          );
-        default:
-          return null;
-      }
-    };
+            className="bg-gray-600 text-white py-2 px-4 rounded w-full"
+          >
+            Supprimée
+          </button>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <section className="container w-4/5 mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+    <section className="container ml-44 w-4/5 mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
           <h1 className="text-4xl font-bold" style={{ fontFamily: "poetsen" }}>
-            {title || "Titre non disponible"}
+            {title || "Pas de titre"}
           </h1>
           <p className="text-lg">
             {description || "Description non disponible"}
@@ -179,21 +197,31 @@ const DetailCandidature = ({
               </span>
             </div>
 
-            {phoneNumber && (
-              <div className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="w-5 h-5 mr-2 text-gray-400"
-                >
-                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                </svg>
-                <span className="font-semibold">{phoneNumber}</span>
-              </div>
-            )}
 
-            {email && (
+
+            {fullName && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                        />
+                      </svg>
+                      <span className="font-semibold">Nom : {fullName}</span>
+                    </div>
+                  )}
+
+
+
+{email && (
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -207,12 +235,53 @@ const DetailCandidature = ({
                 <span className="font-semibold">{email}</span>
               </div>
             )}
+
+            {phoneNumber && (
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-5 h-5 mr-2 text-gray-400"
+                >
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                <span className="font-semibold">{formatPhoneNumber(phoneNumber)}</span>
+              </div>
+            )}
+
+{message && (
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2 text-gray-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                        />
+                      </svg>
+
+                      <span className="font-semibold">Message : {message}</span>
+                    </div>
+                  )}
+
+
+
             {(status == "canceled" || status == "rejected") && (
               <div className="space-y-2">
                 {status && (
                   <div className="flex justify-center items-center gap-3 ">
                     {renderButton()}
-                    <button onClick={deleteCandidature} className="bg-orange-500 rounded p-2 flex justify-center items-center">
+                    <button
+                      onClick={deleteCandidature}
+                      className="bg-orange-500 rounded p-2 flex justify-center items-center"
+                    >
                       <svg
                         fill="#ffffff"
                         viewBox="0 0 24 24"
@@ -262,39 +331,8 @@ const DetailCandidature = ({
                     </div>
                   )}
 
-                  {message && (
-                    <div className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="w-5 h-5 mr-2 text-gray-400"
-                      >
-                        <path d="M4.293 4.293a1 1 0 011.414 0L10 6.586l4.293-4.293a1 1 111.414 1.414L11 8.414l4.293 4.293a1 1 01-1.414 1.414L10 9.828l-4.293 4.293a1 1 01-1.414-1.414L9.828 10l-4.293-4.293a1 1 010-1.414z" />
-                      </svg>
-                      <span className="font-semibold">Message : {message}</span>
-                    </div>
-                  )}
 
-                  {fullName && (
-                    <div className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6 mr-2 text-gray-400"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                        />
-                      </svg>
-                      <span className="font-semibold">Nom : {fullName}</span>
-                    </div>
-                  )}
+
 
                   {price && (
                     <div className="flex items-center">
@@ -363,107 +401,11 @@ const DetailCandidature = ({
                       </span>
                     </div>
                   )}
+
+
+
+                  
                 </div>
-              </div>
-            )}
-
-            {status !== "canceled" && status !== "rejected" && (
-              <div className="flex gap-4 mt-6">
-                <button
-                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold flex justify-center items-center gap-1 py-1 rounded w-full"
-                  onClick={cancelCandidature}
-                >
-                  <svg
-                    width="204px"
-                    height="204px"
-                    viewBox="0 -0.5 17 17"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="#ffffff"
-                    stroke="#ffffff"
-                    className="size-6"
-                  >
-                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></g>
-                    <g id="SVGRepo_iconCarrier">
-                      {" "}
-                      <title>799</title> <defs> </defs>{" "}
-                      <g
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
-                        {" "}
-                        <path
-                          d="M9.016,0.06 C4.616,0.06 1.047,3.629 1.047,8.029 C1.047,12.429 4.615,15.998 9.016,15.998 C13.418,15.998 16.985,12.429 16.985,8.029 C16.985,3.629 13.418,0.06 9.016,0.06 L9.016,0.06 Z M3.049,8.028 C3.049,4.739 5.726,2.062 9.016,2.062 C10.37,2.062 11.616,2.52 12.618,3.283 L4.271,11.631 C3.508,10.629 3.049,9.381 3.049,8.028 L3.049,8.028 Z M9.016,13.994 C7.731,13.994 6.544,13.583 5.569,12.889 L13.878,4.58 C14.571,5.555 14.982,6.743 14.982,8.028 C14.981,11.317 12.306,13.994 9.016,13.994 L9.016,13.994 Z"
-                          fill="#ffffff"
-                          className="si-glyph-fill"
-                        >
-                          {" "}
-                        </path>{" "}
-                      </g>{" "}
-                    </g>
-                  </svg>
-                  Annuler
-                </button>
-                {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Modifier
-              </button> */}
-              </div>
-            )}
-
-{status == "canceled"  && (
-              <div className="flex gap-4 mt-6">
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold flex justify-center items-center gap-1 py-1 rounded w-full"
-                  onClick={deleteCandidature}
-                >
-                  <svg
-                    width="204px"
-                    height="204px"
-                    viewBox="0 -0.5 17 17"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="#ffffff"
-                    stroke="#ffffff"
-                    className="size-6"
-                  >
-                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                    <g
-                      id="SVGRepo_tracerCarrier"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></g>
-                    <g id="SVGRepo_iconCarrier">
-                      {" "}
-                      <title>799</title> <defs> </defs>{" "}
-                      <g
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd"
-                      >
-                        {" "}
-                        <path
-                          d="M9.016,0.06 C4.616,0.06 1.047,3.629 1.047,8.029 C1.047,12.429 4.615,15.998 9.016,15.998 C13.418,15.998 16.985,12.429 16.985,8.029 C16.985,3.629 13.418,0.06 9.016,0.06 L9.016,0.06 Z M3.049,8.028 C3.049,4.739 5.726,2.062 9.016,2.062 C10.37,2.062 11.616,2.52 12.618,3.283 L4.271,11.631 C3.508,10.629 3.049,9.381 3.049,8.028 L3.049,8.028 Z M9.016,13.994 C7.731,13.994 6.544,13.583 5.569,12.889 L13.878,4.58 C14.571,5.555 14.982,6.743 14.982,8.028 C14.981,11.317 12.306,13.994 9.016,13.994 L9.016,13.994 Z"
-                          fill="#ffffff"
-                          className="si-glyph-fill"
-                        >
-                          {" "}
-                        </path>{" "}
-                      </g>{" "}
-                    </g>
-                  </svg>
-                  Supprimer
-                </button>
-                {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Modifier
-              </button> */}
               </div>
             )}
 
@@ -484,6 +426,53 @@ const DetailCandidature = ({
                   <StatusBadge status={status} />
                 </div>
               )}
+            </div>
+          )}
+
+          {status !== "canceled" && status !== "rejected" && (
+            <div className="flex gap-4 mt-6">
+              <button
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold flex justify-center items-center gap-1 py-1 rounded w-full"
+                onClick={cancelCandidature}
+              >
+                <svg
+                  width="204px"
+                  height="204px"
+                  viewBox="0 -0.5 17 17"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#ffffff"
+                  stroke="#ffffff"
+                  className="size-6"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <title>799</title> <defs> </defs>{" "}
+                    <g
+                      stroke="none"
+                      strokeWidth="1"
+                      fill="none"
+                      fillRule="evenodd"
+                    >
+                      {" "}
+                      <path
+                        d="M9.016,0.06 C4.616,0.06 1.047,3.629 1.047,8.029 C1.047,12.429 4.615,15.998 9.016,15.998 C13.418,15.998 16.985,12.429 16.985,8.029 C16.985,3.629 13.418,0.06 9.016,0.06 L9.016,0.06 Z M3.049,8.028 C3.049,4.739 5.726,2.062 9.016,2.062 C10.37,2.062 11.616,2.52 12.618,3.283 L4.271,11.631 C3.508,10.629 3.049,9.381 3.049,8.028 L3.049,8.028 Z M9.016,13.994 C7.731,13.994 6.544,13.583 5.569,12.889 L13.878,4.58 C14.571,5.555 14.982,6.743 14.982,8.028 C14.981,11.317 12.306,13.994 9.016,13.994 L9.016,13.994 Z"
+                        fill="#ffffff"
+                        className="si-glyph-fill"
+                      >
+                        {" "}
+                      </path>{" "}
+                    </g>{" "}
+                  </g>
+                </svg>
+                Annuler
+              </button>
             </div>
           )}
         </div>
